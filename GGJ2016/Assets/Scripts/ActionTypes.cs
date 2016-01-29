@@ -13,6 +13,13 @@ public enum DecisionType {
 public enum State {
     WALKING,
     STANDING,
+    DOING_JOB,
+}
 
+public enum JobType
+{
+    GO_TOILET,
+    BRUSH_TEETH,
+    MAKE_BED,
 
 }

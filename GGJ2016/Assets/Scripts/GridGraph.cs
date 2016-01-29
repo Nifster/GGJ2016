@@ -15,17 +15,53 @@ public struct Point
 	{
 		return x == -1 && y == -1;
 	}
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType()) return false;
+        var o = (Point)obj;
+        return x == o.x && y == o.y;
+    }
+
 }
 
 internal struct Edge
 {
-	public int v1;
-	public int v2;
+    public readonly int x1;
+    public readonly int y1;
+    public readonly int x2;
+    public readonly int y2;
+
+    public Edge(int x1, int y1, int x2, int y2)
+    {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType()) return false;
+        var o = (Edge)obj;
+        return x1 == o.x1 && y1 == o.y1 && x2 == o.x2 && y2 == o.y2;
+    }
+
+    public override int GetHashCode()
+    {
+        int hash = 13;
+        hash = (hash * 7) + x1.GetHashCode();
+        hash = (hash * 7) + y1.GetHashCode();
+        hash = (hash * 7) + x2.GetHashCode();
+        hash = (hash * 7) + y2.GetHashCode();
+        return hash;
+    }
 }
 
 public class GridGraph
 {
 	private bool[,] tileGrid;
+    private HashSet<Edge> blockedEdges;
 	public int scale { get; private set; }
 	public int sizeX { get; private set; }
 	public int sizeY { get; private set; }
@@ -73,6 +109,13 @@ public class GridGraph
 	}
 
 
+    public bool IsBlockedEdge(int x1, int y1, int x2, int y2)
+    {
+        if (IsBlocked(x1, y1)) return true;
+        if (IsBlocked(x2, y2)) return true;
+
+        return blockedEdges.Contains(new Edge(x1, y1, x2, y2));
+    }
 
 	public bool IsBlocked(int gx, int gy)
 	{
@@ -99,10 +142,8 @@ public class GridGraph
 		x = (x - realMinX) / width * sizeX;
 		y = (y - realMinY) / height * sizeY;
 
-
 		gx = (int)(x + 0.5f);
 		gy = (int)(y + 0.5f);
-
 	}
 
 	/// <summary>

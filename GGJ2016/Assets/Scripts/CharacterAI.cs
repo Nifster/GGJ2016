@@ -12,12 +12,19 @@ public class CharacterAI {
     private Dictionary<DecisionType, WeightFunction> weightFunctions;
     private Dictionary<DecisionType, UpdateFunction> updateFunctions;
 
+    private CharacterMovement characterMovement;
+
+    public CharacterAI(CharacterMovement characterMovement)
+    {
+        this.characterMovement = characterMovement;
+    }
+
     private void Initialise()
     {
         weightFunctions = new Dictionary<DecisionType, WeightFunction>
         {
             {DecisionType.MakeBed, WeightMakeBed},
-            {DecisionType.GoToilet, WeightGoToilet},
+            {DecisionType.GoToilet, WeightGoToilet},        
             {DecisionType.BrushTeeth, WeightBrushTeeth},
         };
 
@@ -70,8 +77,18 @@ public class CharacterAI {
         }
     }
 
+    public void OnReachDestination(int cx, int cy)
+    {
 
-#region Weight Functions
+    }
+
+    public void OnObstructed(int cx, int cy, int nextX, int nextY)
+    {
+
+    }
+
+
+    #region Weight Functions
 
     private float WeightGoToilet()
     {
@@ -98,7 +115,7 @@ public class CharacterAI {
 
     private void UpdateGoToilet()
     {
-
+        
     }
 
     private void UpdateBrushTeeth()

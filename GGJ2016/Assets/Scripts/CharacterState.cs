@@ -5,13 +5,13 @@ public class CharacterState
 {
     public State state;
 
-    public State currentJobState;
+    public JobType currentJobType;
     public float jobStartTime;
     public float jobFinishTime;
 
-    public void UpdateCurrentJobState(State s, float taskTime)
+    public void UpdateCurrentJobState(JobType jobType, float taskTime)
     {
-        if (currentJobState == s)
+        if (currentJobType == jobType)
         {
             // Continue Job.
             return;
@@ -19,7 +19,7 @@ public class CharacterState
         else
         {
             // Start Job.
-            currentJobState = s;
+            currentJobType = jobType;
             jobStartTime = Time.time;
             jobFinishTime = jobStartTime + taskTime;
         }
