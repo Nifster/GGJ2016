@@ -3,7 +3,9 @@ using System;
 
 public enum DecisionType {
     None,
-
+    GoToilet,
+    BrushTeeth,
+    MakeBed,
 
 }
 

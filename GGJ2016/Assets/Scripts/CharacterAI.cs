@@ -14,8 +14,19 @@ public class CharacterAI {
 
     private void Initialise()
     {
+        weightFunctions = new Dictionary<DecisionType, WeightFunction>
+        {
+            {DecisionType.MakeBed, WeightMakeBed},
+            {DecisionType.GoToilet, WeightGoToilet},
+            {DecisionType.BrushTeeth, WeightBrushTeeth},
+        };
 
-
+        updateFunctions = new Dictionary<DecisionType, UpdateFunction>
+        {
+            {DecisionType.MakeBed, UpdateMakeBed},
+            {DecisionType.GoToilet, UpdateGoToilet},
+            {DecisionType.BrushTeeth, UpdateBrushTeeth},
+        };
     }
 
 
@@ -62,13 +73,43 @@ public class CharacterAI {
 
 #region Weight Functions
 
+    private float WeightGoToilet()
+    {
 
+        return 1f;
+    }
 
-#endregion
+    private float WeightBrushTeeth()
+    {
+
+        return 0.5f;;
+    }
+
+    private float WeightMakeBed()
+    {
+
+        return 0.5f;
+    }
+
+    #endregion
 
 
 #region Update Functions
 
+    private void UpdateGoToilet()
+    {
+
+    }
+
+    private void UpdateBrushTeeth()
+    {
+
+    }
+
+    private void UpdateMakeBed()
+    {
+
+    }
 
 
 #endregion
