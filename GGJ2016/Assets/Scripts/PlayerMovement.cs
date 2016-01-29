@@ -8,8 +8,6 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField]
 	GameObject gameManager;
 	GridGraph houseGrid;
-	int gx;
-	int gy;
 	[SerializeField]
 	float movementCooldown;
 	float cooldownTimer;
