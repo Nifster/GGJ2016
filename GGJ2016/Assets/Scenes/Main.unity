@@ -94,8 +94,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 562304387}
   - 212: {fileID: 562304386}
+  - 114: {fileID: 562304388}
   m_Layer: 0
-  m_Name: Balloons_01_128x128_Alt_01_006
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,6 +144,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
+--- !u!114 &562304388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 562304385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0e5a9dc016ab72428f2ba19e29d7329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveLeft: 97
+  moveRight: 100
+  moveUp: 119
+  moveDown: 115
+  gameManager: {fileID: 2038361806}
 --- !u!1 &1120926408
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +314,7 @@ GameObject:
   - 4: {fileID: 2038361808}
   - 114: {fileID: 2038361807}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
-	GridGraph houseGrid = new GridGraph();
+	public GridGraph houseGrid = new GridGraph();
 
 	[SerializeField]
 	float realMinX, realMinY, realMaxX, realMaxY;
