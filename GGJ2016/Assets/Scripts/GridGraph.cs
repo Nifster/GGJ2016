@@ -1,12 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Configuration;
 
 public struct Point
 {
 	public int x;
 	public int y;
 
-	public static Point Null()
+    public Point(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public static Point Null()
 	{
 		return new Point{x=-1,y=-1};
 	}
@@ -155,5 +162,57 @@ public class GridGraph
 		y = height*gy/sizeY + realMinY;
 	}
 
+    public Queue<Point> PathFind (int sx, int sy, int ex, int ey, bool ignoreObstructions = true)
+    {
+        var parent = PathFindGetParentPointers(sx, sy, ex, ey, ignoreObstructions);
+        if (parent == null) return null;
 
+        var stack = new Stack<Point>();
+        var curr = new Point(sx, sy);
+        while (curr.x != sx || curr.y != sy)
+        {
+            stack.Push(curr);
+            curr = parent[curr.x, curr.y];
+        }
+        stack.Push(curr);
+
+        var path = new Queue<Point>();
+        while (stack.Count > 0)
+        {
+            path.Enqueue(stack.Pop());
+        }
+        return path;
+    }
+
+    private Point[,] PathFindGetParentPointers(int sx, int sy, int ex, int ey, bool ignoreObstructions)
+    {
+        var parent = new Point[sizeX, sizeY];
+        var visited = new bool[sizeX, sizeY];
+
+        var q = new Queue<Point>();
+        q.Enqueue(new Point(sx, sy));
+
+        while (q.Count > 0)
+        {
+            var curr = q.Dequeue();
+            for (int dx = -1; dx <= 1; ++dx)
+            {
+                for (int dy = -1; dy <= 1; ++dy)
+                {
+                    if ((dx == 0) == (dy == 0)) continue;
+                    int x = curr.x + dx;
+                    int y = curr.y + dy;
+                    if (IsBlocked(x, y)) continue;
+                    if (visited[x, y]) continue;
+                    if (!ignoreObstructions && IsBlockedEdge(curr.x, curr.y, x, y)) continue;
+
+                    parent[x, y] = curr;
+                    if (x == ex && y == ey) return parent;
+                    visited[x, y] = true;
+                    q.Enqueue(new Point(x, y));
+                }
+            }
+        }
+        return null;
+    }
 }

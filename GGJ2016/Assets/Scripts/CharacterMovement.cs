@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,6 +12,8 @@ public class CharacterMovement : MonoBehaviour {
     private CharacterAI ai;
 
     private Queue<Point> pathQueue;
+
+    private Action onStep;
 
     private float moveTime = 0.5f;
     private float moveStartTime;
@@ -52,10 +55,21 @@ public class CharacterMovement : MonoBehaviour {
 
 	}
 
-
-    private void OnObstructed()
+    public void SetOnStepAction(Action action)
     {
+        onStep = action;
+    }
 
+    public bool PathFindTowards(int targetX, int targetY, bool ignoreObstructions)
+    {
+        var path = houseGrid.PathFind(cx, cy, targetX, targetY, ignoreObstructions);
+        if (path == null)
+        {
+            return false;
+        }
+        this.pathQueue = path;
+        GoToNextInQueue();
+        return true;
     }
 
 
@@ -68,6 +82,13 @@ public class CharacterMovement : MonoBehaviour {
         {
             ai.OnReachDestination(cx, cy);
             return;
+        }
+
+        if (onStep != null)
+        {
+            var run = onStep;
+            onStep = null;
+            run();
         }
 
         GoToNextInQueue();
