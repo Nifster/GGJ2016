@@ -84,10 +84,10 @@ public class GridGraph
 		return tileGrid[gx, gy];
 	}
 
-	public bool IsBlockedActual(float x, float y)
+	public bool IsBlockedActual(float x, float y, int dx = 0, int dy = 0)
 	{
-		int gx = (int)((x - realMinX)/width*sizeX);
-		int gy = (int)((y - realMinY)/height*sizeY);
+		int gx = (int)((x - realMinX)/width*sizeX) + dx;
+		int gy = (int)((y - realMinY)/height*sizeY) + dy;
 		return IsBlocked(gx, gy);
 	}
 

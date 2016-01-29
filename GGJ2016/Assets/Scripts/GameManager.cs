@@ -16,6 +16,13 @@ public class GameManager : MonoBehaviour {
 				isBlocked[i,j] = false;
 			}
 		}
+		isBlocked[0,8] = true;
+		isBlocked[0,6] = true;
+		isBlocked[1,6] = true;
+		isBlocked[2,6] = true;
+		isBlocked[3,6] = true;
+		isBlocked[3,8] = true;
+		isBlocked[3,9] = true;
 	
 		houseGrid.Initialise(isBlocked,realMinX,realMinY,realMaxX-realMinX,realMaxY-realMinY);
 	}
