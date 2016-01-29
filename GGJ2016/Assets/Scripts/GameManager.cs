@@ -30,12 +30,23 @@ public class GameManager : MonoBehaviour {
 		//set interactable in positions
 
 		isBlocked[0,8] = true;
+		isBlocked[0,4] = true;
+		isBlocked[1,4] = true;
+		isBlocked[2,4] = true;
+		isBlocked[3,4] = true;
+		isBlocked[4,4] = true;
+		isBlocked[0,5] = true;
+		isBlocked[1,5] = true;
+		isBlocked[2,5] = true;
+		isBlocked[3,5] = true;
+		isBlocked[4,5] = true;
 		isBlocked[0,6] = true;
 		isBlocked[1,6] = true;
 		isBlocked[2,6] = true;
 		isBlocked[3,6] = true;
-		isBlocked[3,8] = true;
-		isBlocked[3,9] = true;
+		isBlocked[4,6] = true;
+		isBlocked[4,8] = true;
+		isBlocked[4,9] = true;
 	
 		houseGrid.Initialise(isBlocked,realMinX,realMinY,realMaxX-realMinX,realMaxY-realMinY);
 	}
