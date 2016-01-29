@@ -69,5 +69,7 @@ public class CharacterAI {
 
 #region Update Functions
 
+
+
 #endregion
 }
