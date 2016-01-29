@@ -2057,7 +2057,7 @@ GameObject:
   - 4: {fileID: 425056099}
   - 212: {fileID: 425056098}
   m_Layer: 0
-  m_Name: roguelikeIndoor_transparent_63
+  m_Name: Bed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2912,7 +2912,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: d135ebe200fc9e34fb260c63defdbd83, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 250f85c6aabc24744b06b3fced913a41, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

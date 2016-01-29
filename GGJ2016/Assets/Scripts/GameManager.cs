@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class GameManager : MonoBehaviour {
@@ -9,13 +10,25 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	float realMinX, realMinY, realMaxX, realMaxY;
 	// Use this for initialization
+
+	[SerializeField]
+	//public List<Interactable> interactablesList = new List<Interactable>();
+	public Dictionary<Point,Interactable> interactableHash = new Dictionary<Point,Interactable>();
 	void Start () {
+		
+		//interactablesList.Add(new Interactable("bed",0,8));
+		interactableHash.Add(new Point{x=0,y=8},new Interactable("bed",0,8));
+
+		//initialize empty room
 		bool[,] isBlocked = new bool[10,10];
 		for(int i=0; i<isBlocked.GetLength(0);i++){
 			for(int j=0; j< isBlocked.GetLength(1);j++){
 				isBlocked[i,j] = false;
 			}
 		}
+
+		//set interactable in positions
+
 		isBlocked[0,8] = true;
 		isBlocked[0,6] = true;
 		isBlocked[1,6] = true;
