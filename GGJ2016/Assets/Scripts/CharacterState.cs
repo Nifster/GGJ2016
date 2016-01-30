@@ -3,14 +3,22 @@ using System;
 
 public class CharacterState
 {
-    public State state;
+    public State state { get; private set; }
 
-    public JobType currentJobType;
-    public float jobStartTime;
-    public float jobFinishTime;
+    public JobType currentJobType { get; private set; }
+    public float jobStartTime { get; private set; }
+    public float jobFinishTime { get; private set; }
 
-    public void UpdateCurrentJobState(JobType jobType, float taskTime)
+    public CharacterState()
     {
+        state = State.STANDING;
+        currentJobType = JobType.NONE;
+    }
+
+    public void StartJob(JobType jobType, float taskTime)
+    {
+        state = State.DOING_JOB;
+        
         if (currentJobType == jobType)
         {
             // Continue Job.
@@ -31,6 +39,23 @@ public class CharacterState
     }
 
     public bool JobDone {
-        get { return Time.time > jobFinishTime; }
+        get { return currentJobType != JobType.NONE && Time.time > jobFinishTime; }
+    }
+
+    public void SetState(State s)
+    {
+        Debug.Log("Set State -> " + s);
+        if (s == State.DOING_JOB)
+        {
+            throw new ArgumentException("this function should not be used for DOING_JOB. use UpdateCurrentJobStatus instead");
+        }
+
+        state = s;
+        currentJobType = JobType.NONE;
+    }
+
+    public void CancelJob()
+    {
+        SetState(State.STANDING);
     }
 }

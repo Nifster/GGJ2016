@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour {
 	public List<Sprite> sprites = new List<Sprite>();
 	// Use this for initialization
 	void Start () {
-		houseGrid = gameManager.GetComponent<GameManager>().houseGrid;
+		houseGrid = gameManager.GetComponent<GameManager>().HouseGrid;
 		interactableHash = gameManager.GetComponent<GameManager>().interactableHash;
 	}
 

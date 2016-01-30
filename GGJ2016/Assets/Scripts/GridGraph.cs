@@ -30,6 +30,10 @@ public struct Point
         return x == o.x && y == o.y;
     }
 
+    public override string ToString()
+    {
+        return "("+x+","+y+")";
+    }
 }
 
 internal struct Edge
@@ -69,27 +73,29 @@ public class GridGraph
 {
 	private bool[,] tileGrid;
     private HashSet<Edge> blockedEdges;
-	public int scale { get; private set; }
 	public int sizeX { get; private set; }
 	public int sizeY { get; private set; }
-	public float realMinX;
-	public float realMinY;
-	public float width;
-	public float height;
+    public float realMinX { get; private set; }
+    public float realMinY { get; private set; }
+    public float width { get; private set; }
+    public float height { get; private set; }
+    public float tileWidth { get; private set; }
+    public float tileHeight { get; private set; }
 
 	private List<Point> emptyBlockList; 
 
 
 	public void Initialise(bool[,] tiles, float realMinX, float realMinY, float width, float height)
 	{
-		scale = 3;
-
+	    this.blockedEdges = new HashSet<Edge>();
 		this.realMinX = realMinX;
 		this.realMinY = realMinY;
 		this.width = width;
 		this.height = height;
 		this.sizeX = tiles.GetLength(0);
 		this.sizeY = tiles.GetLength(1);
+	    this.tileWidth = width/sizeX;
+	    this.tileHeight = height/sizeY;
 		tileGrid = tiles;
 		InitialiseEmptyBlockList();
 	}
@@ -148,9 +154,9 @@ public class GridGraph
 	{
 		x = (x - realMinX) / width * sizeX;
 		y = (y - realMinY) / height * sizeY;
-
-		gx = (int)(x + 0.5f);
-		gy = (int)(y + 0.5f);
+	    
+		gx = (int)(x);
+		gy = (int)(y);
 	}
 
 	/// <summary>
@@ -158,8 +164,8 @@ public class GridGraph
 	/// </summary>
 	public void ToRealCoordinates(int gx, int gy, out float x, out float y)
 	{
-		x = width*gx/sizeX + realMinX;
-		y = height*gy/sizeY + realMinY;
+		x = width*(gx+0.5f)/sizeX + realMinX;
+		y = height*(gy+0.5f)/sizeY + realMinY;
 	}
 
     public Queue<Point> PathFind (int sx, int sy, int ex, int ey, bool ignoreObstructions = true)
@@ -168,7 +174,7 @@ public class GridGraph
         if (parent == null) return null;
 
         var stack = new Stack<Point>();
-        var curr = new Point(sx, sy);
+        var curr = new Point(ex, ey);
         while (curr.x != sx || curr.y != sy)
         {
             stack.Push(curr);
