@@ -240,9 +240,9 @@ public class GridGraph
         switch (dir)
         {
             case Orientation.UP:
-                return (y1 - y2) > Math.Abs(x1 - x2);
-            case Orientation.DOWN:
                 return (y2 - y1) > Math.Abs(x1 - x2);
+            case Orientation.DOWN:
+                return (y1 - y2) > Math.Abs(x1 - x2);
             case Orientation.LEFT:
                 return (x1 - x2) > Math.Abs(y1 - y2);
             case Orientation.RIGHT:
