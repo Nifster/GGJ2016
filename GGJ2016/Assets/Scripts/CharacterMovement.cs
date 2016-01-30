@@ -87,26 +87,36 @@ public class CharacterMovement : MonoBehaviour
     public void FaceDirection(Orientation dir)
     {
         currentOrientation = dir;
+        switch (dir)
+        {
+            case Orientation.UP:
+                characterAnim.SetInteger("dir", (int)Orientation.UP);
+                break;
+            case Orientation.DOWN:
+                characterAnim.SetInteger("dir", (int)Orientation.DOWN);
+                break;
+            case Orientation.LEFT:
+                characterAnim.SetInteger("dir", (int)Orientation.LEFT);
+                break;
+            case Orientation.RIGHT:
+                characterAnim.SetInteger("dir", (int)Orientation.RIGHT);
+                break;
+        }
     }
 
     private void UpdateFacingDirection()
     {
 		if (nextX > cx){
 			FaceDirection(Orientation.RIGHT);
-			characterAnim.SetInteger("dir",(int)Orientation.RIGHT);
 		}
 		if (nextX < cx){
 			FaceDirection(Orientation.LEFT);
-			characterAnim.SetInteger("dir",(int)Orientation.LEFT);
 		}
-
 		if (nextY > cy) {
 			FaceDirection(Orientation.UP);
-			characterAnim.SetInteger("dir",(int)Orientation.UP);
 		}
 		if (nextY < cy) {
 			FaceDirection(Orientation.DOWN);
-			characterAnim.SetInteger("dir",(int)Orientation.DOWN);
 		}
     }
 
