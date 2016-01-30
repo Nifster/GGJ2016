@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
 
 
         //initialise interactables
-        interactables.Add(new Interactable("bed", 0, 8));
+        interactables.Add(new Interactable(0, 8, InteractMakeBed));
 
         //initialise pickupables
         InitialisePickupables();
@@ -167,6 +167,18 @@ public class GameManager : MonoBehaviour
 
     // Update is called once per frame
 	void Update () {
-	
-	}
+
+    }
+
+
+    #region Interact Actions
+
+    private void InteractMakeBed()
+    {
+        if (gameVars.madeBed) return;
+        gameVars.madeBed = true;
+    }
+
+
+    #endregion
 }

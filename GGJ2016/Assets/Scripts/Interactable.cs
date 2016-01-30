@@ -1,26 +1,29 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
+
+public enum InteractableType
+{
+    BED,
+    REFRIDGERATOR,
+}
+
 public class Interactable{
-	string name;
     public int gx { get; private set; }
     public int gy { get; private set; }
-    bool used;
+    private Action interactAction;
 
-	public Interactable(string name,int gx,int gy){
-		this.name = name;
+	public Interactable(int gx,int gy, Action interactAction)
+	{
+	    this.interactAction = interactAction;
 		this.gx = gx;
 		this.gy = gy;
-		this.used = false;
-	}
-
-	public bool isUsed(){
-		return this.used;
 	}
 
     public void Interact()
     {
-        Debug.Log("Interact!");
+        interactAction();
     }
 }	
 
