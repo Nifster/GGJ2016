@@ -16,6 +16,7 @@ public class CharacterMovement : MonoBehaviour
     private Queue<Point> pathQueue;
     private int targetX; // set together with pathQueue
     private int targetY; // set together with pathQueue
+    private Orientation targetOrientation; // set together with pathQueue
 
     private Action onStep;
     private OnReachDestinationFunction onReachDestination;
@@ -26,6 +27,7 @@ public class CharacterMovement : MonoBehaviour
 
     private bool stopped;
     private bool moving;
+    private Orientation currentOrientation;
     private int cx;
     private int cy;
     private int nextX;
@@ -80,7 +82,7 @@ public class CharacterMovement : MonoBehaviour
 
     public void FaceDirection(Orientation dir)
     {
-
+        currentOrientation = dir;
     }
 
     private void UpdateFacingDirection()
@@ -96,7 +98,7 @@ public class CharacterMovement : MonoBehaviour
         onStep = action;
     }
 
-    public bool PathFindTowards(int tx, int ty, OnReachDestinationFunction onReach)
+    public bool PathFindTowards(int tx, int ty, Orientation targetOrientation, OnReachDestinationFunction onReach)
     {
         var path = houseGrid.PathFind(cx, cy, tx, ty, ignoreObstructions:false);
         if (path == null)
@@ -107,6 +109,7 @@ public class CharacterMovement : MonoBehaviour
         this.pathQueue = path;
         this.targetX = tx;
         this.targetY = ty;
+        this.targetOrientation = targetOrientation;
         GoToNextInQueue();
         return true;
     }
@@ -120,6 +123,7 @@ public class CharacterMovement : MonoBehaviour
         
         if (pathQueue.Count <= 0)
         {
+            FaceDirection(targetOrientation);
             onReachDestination(cx, cy);
             return;
         }
