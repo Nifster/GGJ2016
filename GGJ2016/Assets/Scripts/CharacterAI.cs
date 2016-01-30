@@ -167,33 +167,34 @@ public class CharacterAI {
         var c = character;
         if (p.cx == c.cx && p.cy == c.cy)
         {
-            heldItems.Add(p);
+            heldItems.Add(p.CharacterTake(c.transform));
             return true;
         }
         if (p.cx == c.cx && p.cy == c.cy + 1)
         {
             c.FaceDirection(Orientation.DOWN);
-            heldItems.Add(p);
+            heldItems.Add(p.CharacterTake(c.transform));
             return true;
         }
         if (p.cx == c.cx && p.cy == c.cy - 1)
         {
             c.FaceDirection(Orientation.UP);
-            heldItems.Add(p);
+            heldItems.Add(p.CharacterTake(c.transform));
             return true;
         }
         if (p.cx == c.cx - 1 && p.cy == c.cy)
         {
             c.FaceDirection(Orientation.LEFT);
-            heldItems.Add(p);
+            heldItems.Add(p.CharacterTake(c.transform));
             return true;
         }
         if (p.cx == c.cx + 1 && p.cy == c.cy)
-            heldItems.Add(p);
         {
             c.FaceDirection(Orientation.RIGHT);
+            heldItems.Add(p.CharacterTake(c.transform));
             return true;
         }
+        return false;
     }
 
     private void WalkTowards(int targetX, int targetY, bool relaxed = false)
