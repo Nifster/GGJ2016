@@ -41,7 +41,7 @@ public class GameVariables
     public const int bedSideX = 2;
     public const int bedSideY = 15;
 
-    public const int exitX = 9;
+    public const int exitX = 19;
     public const int exitY = 0;
 
     public const int searchRoomX = 3;

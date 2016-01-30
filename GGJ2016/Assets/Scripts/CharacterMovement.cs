@@ -138,6 +138,17 @@ public class CharacterMovement : MonoBehaviour
     public void SetOnStepAction(Action action)
     {
         onStep = action;
+        if (!isMoving)
+        {
+            RunOnStepAction();
+        }
+    }
+
+    private void RunOnStepAction()
+    {
+        var run = onStep;
+        onStep = null;
+        run();
     }
 
     public bool PathFindTowards(int tx, int ty, Orientation targetOrientation, OnReachDestinationFunction onReach, bool tryHarder = false)
@@ -179,9 +190,7 @@ public class CharacterMovement : MonoBehaviour
 
         if (onStep != null)
         {
-            var run = onStep;
-            onStep = null;
-            run();
+            RunOnStepAction();
         }
         
         GoToNextInQueue();
