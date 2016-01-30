@@ -22,9 +22,9 @@ public class GameManager : MonoBehaviour
 	float realMinX, realMinY, realMaxX, realMaxY;
 	// Use this for initialization
 
-	[SerializeField]
-	//public List<Interactable> interactablesList = new List<Interactable>();
 	public Dictionary<Point,Interactable> interactableHash = new Dictionary<Point,Interactable>();
+	public Dictionary<Point,PickUpable> pickUpsHash = new Dictionary<Point,PickUpable>();
+
 
     private void Start()
     {
@@ -36,8 +36,11 @@ public class GameManager : MonoBehaviour
         if (houseGrid != null) return;
         houseGrid = new GridGraph();
 
-        //interactablesList.Add(new Interactable("bed",0,8));
+        //initialise interactables
         interactableHash.Add(new Point {x = 0, y = 8}, new Interactable("bed", 0, 8));
+
+		//initialise pickupables
+		pickUpsHash.Add(new Point{x=2, y=2}, new PickUpable(PickUps.Bowl));
 
         //initialize empty room
         bool[,] isBlocked = new bool[10, 10];

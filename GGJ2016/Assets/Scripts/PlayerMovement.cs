@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour {
 	GameObject gameManager;
 	GridGraph houseGrid;
 	Dictionary<Point, Interactable> interactableHash;
+	Dictionary<Point,PickUpable> pickUpsHash;
 
 	[SerializeField]
 	float movementCooldown;
@@ -20,6 +21,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
 		houseGrid = gameManager.GetComponent<GameManager>().HouseGrid;
 		interactableHash = gameManager.GetComponent<GameManager>().interactableHash;
+		pickUpsHash = gameManager.GetComponent<GameManager>().pickUpsHash;
 	}
 
 	// Update is called once per frame
@@ -27,23 +29,8 @@ public class PlayerMovement : MonoBehaviour {
 
 		MovementCheck();
 		//check if next to interactable
-		int gx, gy;
-		houseGrid.ToGridCoordinates(this.transform.position.x,this.transform.position.y,out gx,out gy);
-		//Debug.Log("GX: "+gx);
-		//Debug.Log("GY: "+gy);
-		if(interactableHash.ContainsKey(new Point{x=gx+1,y=gy}) && this.GetComponent<SpriteRenderer>().sprite == sprites[0]){
-			Debug.Log("Interactable found GX:" + gx +" GY: " +gy);
-		}
-		if(interactableHash.ContainsKey(new Point{x=gx,y=gy+1}) && this.GetComponent<SpriteRenderer>().sprite == sprites[1]){
-			Debug.Log("Interactable found GX:" + gx +" GY: " +gy);
-		}
-		if(interactableHash.ContainsKey(new Point{x=gx-1,y=gy}) && this.GetComponent<SpriteRenderer>().sprite == sprites[2]){
-			Debug.Log("Interactable found GX:" + gx +" GY: " +gy);
-		}
-		if(interactableHash.ContainsKey(new Point{x=gx,y=gy-1}) && this.GetComponent<SpriteRenderer>().sprite == sprites[3]){
-			Debug.Log("Interactable found GX:" + gx +" GY: " +gy);
-		}
-
+		InteractableCheck();
+		PickUpableCheck();
 			
 	}
 
@@ -108,4 +95,83 @@ public class PlayerMovement : MonoBehaviour {
 			}
 		}
 	}
+
+	void InteractableCheck()
+	{
+		int gx, gy;
+		houseGrid.ToGridCoordinates (this.transform.position.x, this.transform.position.y, out gx, out gy);
+		if (interactableHash.ContainsKey (new Point {
+			x = gx + 1,
+			y = gy
+		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [0]) {
+			Debug.Log ("Interactable found GX:" + gx + " GY: " + gy);
+		}
+		if (interactableHash.ContainsKey (new Point {
+			x = gx,
+			y = gy + 1
+		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [1]) {
+			Debug.Log ("Interactable found GX:" + gx + " GY: " + gy);
+		}
+		if (interactableHash.ContainsKey (new Point {
+			x = gx - 1,
+			y = gy
+		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [2]) {
+			Debug.Log ("Interactable found GX:" + gx + " GY: " + gy);
+		}
+		if (interactableHash.ContainsKey (new Point {
+			x = gx,
+			y = gy - 1
+		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [3]) {
+			Debug.Log ("Interactable found GX:" + gx + " GY: " + gy);
+		}
+	}
+
+	void PickUpableCheck()
+	{
+		int gx, gy;
+		PickUpable pickUpFound;
+		houseGrid.ToGridCoordinates (this.transform.position.x, this.transform.position.y, out gx, out gy);
+		if (pickUpsHash.ContainsKey (new Point {
+			x = gx + 1,
+			y = gy
+		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [0]) {
+			pickUpsHash.TryGetValue(new Point {
+				x = gx + 1,
+				y = gy}, out pickUpFound);
+			Debug.Log (pickUpFound.getName());
+		}
+
+		if (pickUpsHash.ContainsKey (new Point {
+			x = gx,
+			y = gy + 1
+		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [1]) {
+			pickUpsHash.TryGetValue(new Point {
+				x = gx,
+				y = gy+ 1}, out pickUpFound);
+			Debug.Log (pickUpFound.getName());
+		}
+
+		if (pickUpsHash.ContainsKey (new Point {
+			x = gx - 1,
+			y = gy
+		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [2]) {
+			pickUpsHash.TryGetValue(new Point {
+				x = gx-1,
+				y = gy}, out pickUpFound);
+			Debug.Log (pickUpFound.getName());
+		}
+
+		if (pickUpsHash.ContainsKey (new Point {
+			x = gx,
+			y = gy - 1
+		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [3]) {
+			pickUpsHash.TryGetValue(new Point {
+				x = gx,
+				y = gy - 1}, out pickUpFound);
+			Debug.Log (pickUpFound.getName());
+		}
+	}
+
+
+  
 }
