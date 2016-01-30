@@ -23,7 +23,8 @@ public class CharacterAI {
         {
             {DecisionType.MakeBed, WeightMakeBed},
             {DecisionType.GoToilet, WeightGoToilet},        
-            {DecisionType.BrushTeeth, WeightBrushTeeth},
+            {DecisionType.BrushTeeth, WeightBrushTeeth},    
+            {DecisionType.LeaveHouse, WeightLeaveHouse},
         };
 
         updateFunctions = new Dictionary<DecisionType, UpdateFunction>
@@ -31,6 +32,7 @@ public class CharacterAI {
             {DecisionType.MakeBed, UpdateMakeBed},
             {DecisionType.GoToilet, UpdateGoToilet},
             {DecisionType.BrushTeeth, UpdateBrushTeeth},
+            {DecisionType.LeaveHouse, UpdateLeaveHouse},
         };
 
 
@@ -121,6 +123,11 @@ public class CharacterAI {
         return 0.5f;
     }
 
+    private float WeightLeaveHouse()
+    {
+        return 0;
+    }
+
     #endregion
 
 
@@ -201,6 +208,21 @@ public class CharacterAI {
     }
 
 
+    private void UpdateLeaveHouse()
+    {
+        DefaultUpdateFunction(
+            GameVariables.exitX,
+            GameVariables.exitY,
+            OnReachLeaveHouse,
+            JobType.LEAVE_HOUSE,
+            (gameVars) =>
+            {
+                gameVars.leftHouse = true;
+            }
+        );
+    }
+
+
 #endregion
 
 
@@ -219,6 +241,11 @@ public class CharacterAI {
     private void OnReachMakeBed(int cx, int cy)
     {
         charState.StartJob(JobType.MAKE_BED, 5f);
+    }
+
+    private void OnReachLeaveHouse(int cx, int cy)
+    {
+        charState.StartJob(JobType.LEAVE_HOUSE, 1f);
     }
 
 

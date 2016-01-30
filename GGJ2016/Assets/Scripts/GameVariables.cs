@@ -47,5 +47,8 @@ public class GameVariables
     public const int bedSideX = 5;
     public const int bedSideY = 2;
 
+    public const int exitX = 9;
+    public const int exitY = 0;
+
 
 }
