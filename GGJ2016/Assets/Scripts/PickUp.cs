@@ -60,18 +60,23 @@ public class PickUp {
         this.cx = cx;
         this.cy = cy;
         this.status = PickUpStatus.Unheld;
+        transform.parent = null;
         RefreshPosition();
     }
 
-    public PickUp CharacterTake()
+    public PickUp CharacterTake(Transform t)
     {
         this.status = PickUpStatus.CharacterHeld;
+        transform.position = t.position;
+        transform.parent = t;
         return this;
     }
 
-    public PickUp PlayerTake()
+    public PickUp PlayerTake(Transform t)
     {
         this.status = PickUpStatus.PlayerHeld;
+        transform.position = t.position;
+        transform.parent = t;
         return this;
     }
 
