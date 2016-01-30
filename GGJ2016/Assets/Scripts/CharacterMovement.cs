@@ -106,6 +106,11 @@ public class CharacterMovement : MonoBehaviour
     private void SetIsMoving(bool value)
     {
         isMoving = value;
+		if(value){
+			characterAnim.speed=1;
+		}else{
+			characterAnim.speed=0;
+		}
 
     }
 
