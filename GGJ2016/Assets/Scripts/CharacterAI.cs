@@ -141,6 +141,11 @@ public class CharacterAI {
         return gameManager.pickups[item].hasBeliefInLocation;
     }
 
+    private void LoseBeliefInLocation(PickUpType item)
+    {
+        gameManager.pickups[item].LoseBeliefInLocation();
+    }
+
 
     private bool CanSee(PickUpType item)
     {
@@ -391,7 +396,8 @@ public class CharacterAI {
 
     private void OnReachFindToothbrush(int cx, int cy)
     {
-        TryTakeItem(PickUpType.Toothbrush);
+        bool result = TryTakeItem(PickUpType.Toothbrush);
+        if (!result) LoseBeliefInLocation(PickUpType.Toothbrush);
     }
 
     private void OnReachCannotFindToothbrush(int cx, int cy)
