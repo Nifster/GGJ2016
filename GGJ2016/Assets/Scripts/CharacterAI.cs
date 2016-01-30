@@ -170,34 +170,37 @@ public class CharacterAI {
     {
         var p = gameManager.pickups[item];
         var c = character;
-        if (p.cx == c.cx && p.cy == c.cy)
+        if (p.CanTake())
         {
-            heldItems.Add(p.CharacterTake(c.transform));
-            return true;
-        }
-        if (p.cx == c.cx && p.cy == c.cy + 1)
-        {
-            c.FaceDirection(Orientation.DOWN);
-            heldItems.Add(p.CharacterTake(c.transform));
-            return true;
-        }
-        if (p.cx == c.cx && p.cy == c.cy - 1)
-        {
-            c.FaceDirection(Orientation.UP);
-            heldItems.Add(p.CharacterTake(c.transform));
-            return true;
-        }
-        if (p.cx == c.cx - 1 && p.cy == c.cy)
-        {
-            c.FaceDirection(Orientation.LEFT);
-            heldItems.Add(p.CharacterTake(c.transform));
-            return true;
-        }
-        if (p.cx == c.cx + 1 && p.cy == c.cy)
-        {
-            c.FaceDirection(Orientation.RIGHT);
-            heldItems.Add(p.CharacterTake(c.transform));
-            return true;
+            if (p.cx == c.cx && p.cy == c.cy)
+            {
+                heldItems.Add(p.CharacterTake(c.transform));
+                return true;
+            }
+            if (p.cx == c.cx && p.cy == c.cy + 1)
+            {
+                c.FaceDirection(Orientation.DOWN);
+                heldItems.Add(p.CharacterTake(c.transform));
+                return true;
+            }
+            if (p.cx == c.cx && p.cy == c.cy - 1)
+            {
+                c.FaceDirection(Orientation.UP);
+                heldItems.Add(p.CharacterTake(c.transform));
+                return true;
+            }
+            if (p.cx == c.cx - 1 && p.cy == c.cy)
+            {
+                c.FaceDirection(Orientation.LEFT);
+                heldItems.Add(p.CharacterTake(c.transform));
+                return true;
+            }
+            if (p.cx == c.cx + 1 && p.cy == c.cy)
+            {
+                c.FaceDirection(Orientation.RIGHT);
+                heldItems.Add(p.CharacterTake(c.transform));
+                return true;
+            }
         }
         return false;
     }
