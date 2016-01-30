@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public class GameManager : MonoBehaviour
@@ -31,8 +32,8 @@ public class GameManager : MonoBehaviour
 	float realMinX, realMinY, realMaxX, realMaxY;
 	// Use this for initialization
 
-	public Dictionary<Point,Interactable> interactableHash = new Dictionary<Point,Interactable>();
-	public Dictionary<Point,PickUp> pickUpsHash = new Dictionary<Point,PickUp>();
+    public List<Interactable> interactables = new List<Interactable>();
+	public List<PickUp> pickups = new List<PickUp>();
 
 
     private void Start()
@@ -81,7 +82,7 @@ public class GameManager : MonoBehaviour
 
 
         //initialise interactables
-        interactableHash.Add(new Point { x = 0, y = 8 }, new Interactable("bed", 0, 8));
+        interactables.Add(new Interactable("bed", 0, 8));
 
         //initialise pickupables
         InitialisePickupables();
@@ -89,25 +90,20 @@ public class GameManager : MonoBehaviour
 
     private void InitialisePickupables()
     {
-        var pickups = new PickUp[]
+        pickups = new PickUp[]
         {
-            new PickUp(PickUpType.Toothbrush, 0,0, prefab_pickup),
-            new PickUp(PickUpType.Milk, 1,0, prefab_pickup),
-            new PickUp(PickUpType.Cereal, 2,0, prefab_pickup),
-            new PickUp(PickUpType.Bowl, 3,0, prefab_pickup),
-            new PickUp(PickUpType.Coffee, 4,0, prefab_pickup),
-            new PickUp(PickUpType.Clothes, 5,0, prefab_pickup),
-            new PickUp(PickUpType.Newspaper, 6,0, prefab_pickup),
-            new PickUp(PickUpType.Keys, 7,0, prefab_pickup),
-            new PickUp(PickUpType.Wallet, 8,0, prefab_pickup),
-            new PickUp(PickUpType.Briefcase, 9,0, prefab_pickup),
-            new PickUp(PickUpType.Shoes, 10,0, prefab_pickup),
-        };
-
-        foreach (var pickup in pickups)
-        {
-            pickUpsHash.Add(new Point(pickup.cx, pickup.cy), pickup);
-        }
+            new PickUp(PickUpType.Toothbrush, 0, 0, prefab_pickup),
+            new PickUp(PickUpType.Milk, 1, 0, prefab_pickup),
+            new PickUp(PickUpType.Cereal, 2, 0, prefab_pickup),
+            new PickUp(PickUpType.Bowl, 3, 0, prefab_pickup),
+            new PickUp(PickUpType.Coffee, 4, 0, prefab_pickup),
+            new PickUp(PickUpType.Clothes, 5, 0, prefab_pickup),
+            new PickUp(PickUpType.Newspaper, 6, 0, prefab_pickup),
+            new PickUp(PickUpType.Keys, 7, 0, prefab_pickup),
+            new PickUp(PickUpType.Wallet, 8, 0, prefab_pickup),
+            new PickUp(PickUpType.Briefcase, 9, 0, prefab_pickup),
+            new PickUp(PickUpType.Shoes, 10, 0, prefab_pickup),
+        }.ToList();
     }
 
     private void OnDrawGizmos()

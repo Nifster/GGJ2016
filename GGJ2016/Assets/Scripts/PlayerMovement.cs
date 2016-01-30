@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -9,8 +10,8 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField]
 	GameObject gameManager;
 	GridGraph houseGrid;
-	Dictionary<Point, Interactable> interactableHash;
-	Dictionary<Point,PickUp> pickUpsHash;
+	List<Interactable> interactables;
+	List<PickUp> pickups;
     private PickUp currentlyHeldPickUp;
 
     private Orientation orientation;
@@ -23,8 +24,8 @@ public class PlayerMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		houseGrid = gameManager.GetComponent<GameManager>().HouseGrid;
-		interactableHash = gameManager.GetComponent<GameManager>().interactableHash;
-		pickUpsHash = gameManager.GetComponent<GameManager>().pickUpsHash;
+        interactables = gameManager.GetComponent<GameManager>().interactables;
+        pickups = gameManager.GetComponent<GameManager>().pickups;
 	}
 
 	// Update is called once per frame
@@ -145,12 +146,8 @@ public class PlayerMovement : MonoBehaviour {
 		houseGrid.ToGridCoordinates (this.transform.position.x, this.transform.position.y, out gx, out gy);
         int dx = ToMovementX(orientation);
         int dy = ToMovementY(orientation);
-	    Interactable interactable = null;
-        if (interactableHash.TryGetValue(new Point(gx+dx,gy+dy), out interactable))
-        {
-            return interactable;
-        }
-	    return null;
+
+	    return interactables.FirstOrDefault(interactable => interactable.gx == gx + dx && interactable.gy == gy + dy);
 	}
 
 	PickUp FindPickUpInFront()
@@ -159,12 +156,8 @@ public class PlayerMovement : MonoBehaviour {
         houseGrid.ToGridCoordinates(this.transform.position.x, this.transform.position.y, out gx, out gy);
         int dx = ToMovementX(orientation);
         int dy = ToMovementY(orientation);
-        PickUp pickup = null;
-        if (pickUpsHash.TryGetValue(new Point(gx + dx, gy + dy), out pickup))
-        {
-            return pickup;
-        }
-        return null;
+
+        return pickups.FirstOrDefault(pickup => pickup.cx == gx + dx && pickup.cy == gy + dy);
 	}
 
 
