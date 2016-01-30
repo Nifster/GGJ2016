@@ -31,6 +31,14 @@ public struct Point
         return x == o.x && y == o.y;
     }
 
+    public override int GetHashCode()
+    {
+        int hash = 13;
+        hash = (hash * 7) + x.GetHashCode();
+        hash = (hash * 7) + y.GetHashCode();
+        return hash;
+    }
+
     public override string ToString()
     {
         return "("+x+","+y+")";

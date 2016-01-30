@@ -5,6 +5,15 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameObject prefab_pickup;
+
+    public static GameManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public static string debugStatusText;
 
     private GridGraph houseGrid;
@@ -23,11 +32,12 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 
 	public Dictionary<Point,Interactable> interactableHash = new Dictionary<Point,Interactable>();
-	public Dictionary<Point,PickUpable> pickUpsHash = new Dictionary<Point,PickUpable>();
+	public Dictionary<Point,PickUp> pickUpsHash = new Dictionary<Point,PickUp>();
 
 
     private void Start()
     {
+
         Initialise();
     }
 
@@ -35,12 +45,6 @@ public class GameManager : MonoBehaviour
     {
         if (houseGrid != null) return;
         houseGrid = new GridGraph();
-
-        //initialise interactables
-        interactableHash.Add(new Point {x = 0, y = 8}, new Interactable("bed", 0, 8));
-
-		//initialise pickupables
-		pickUpsHash.Add(new Point{x=2, y=2}, new PickUpable(PickUps.Bowl));
 
         //initialize empty room
         bool[,] isBlocked = new bool[10, 10];
@@ -74,6 +78,36 @@ public class GameManager : MonoBehaviour
         isBlocked[4, 9] = true;
 
         houseGrid.Initialise(isBlocked, realMinX, realMinY, realMaxX - realMinX, realMaxY - realMinY);
+
+
+        //initialise interactables
+        interactableHash.Add(new Point { x = 0, y = 8 }, new Interactable("bed", 0, 8));
+
+        //initialise pickupables
+        InitialisePickupables();
+    }
+
+    private void InitialisePickupables()
+    {
+        var pickups = new PickUp[]
+        {
+            new PickUp(PickUpType.Toothbrush, 0,0, prefab_pickup),
+            new PickUp(PickUpType.Milk, 1,0, prefab_pickup),
+            new PickUp(PickUpType.Cereal, 2,0, prefab_pickup),
+            new PickUp(PickUpType.Bowl, 3,0, prefab_pickup),
+            new PickUp(PickUpType.Coffee, 4,0, prefab_pickup),
+            new PickUp(PickUpType.Clothes, 5,0, prefab_pickup),
+            new PickUp(PickUpType.Newspaper, 6,0, prefab_pickup),
+            new PickUp(PickUpType.Keys, 7,0, prefab_pickup),
+            new PickUp(PickUpType.Wallet, 8,0, prefab_pickup),
+            new PickUp(PickUpType.Briefcase, 9,0, prefab_pickup),
+            new PickUp(PickUpType.Shoes, 10,0, prefab_pickup),
+        };
+
+        foreach (var pickup in pickups)
+        {
+            pickUpsHash.Add(new Point(pickup.cx, pickup.cy), pickup);
+        }
     }
 
     private void OnDrawGizmos()
