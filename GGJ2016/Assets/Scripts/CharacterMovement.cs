@@ -25,8 +25,7 @@ public class CharacterMovement : MonoBehaviour
     private float moveStartTime;
     private float moveEndTime;
 
-    private bool stopped;
-    private bool moving;
+    private bool isMoving;
     private Orientation currentOrientation;
     private int cx;
     private int cy;
@@ -37,7 +36,7 @@ public class CharacterMovement : MonoBehaviour
     private void OnDrawGizmos()
     {
         if (houseGrid == null) return;
-        if (moving)
+        if (isMoving)
         {
             Vector2 targetPos;
             houseGrid.ToRealCoordinates(targetX, targetY, out targetPos.x, out targetPos.y);
@@ -63,7 +62,7 @@ public class CharacterMovement : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-	    if (moving)
+	    if (isMoving)
 	    {
 	        var nextPosition = Vector2.zero;
 	        houseGrid.ToRealCoordinates(nextX, nextY, out nextPosition.x, out nextPosition.y);
@@ -103,6 +102,13 @@ public class CharacterMovement : MonoBehaviour
                 break;
         }
     }
+
+    private void SetIsMoving(bool value)
+    {
+        isMoving = value;
+
+    }
+
 
     private void UpdateFacingDirection()
     {
@@ -144,7 +150,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void OnReach()
     {
-        moving = false;
+        SetIsMoving(false);
         cx = nextX;
         cy = nextY;
         
@@ -174,7 +180,7 @@ public class CharacterMovement : MonoBehaviour
             return;
         }
 
-        moving = true;
+        SetIsMoving(true);
         nextX = next.x;
         nextY = next.y;
         UpdateFacingDirection();
