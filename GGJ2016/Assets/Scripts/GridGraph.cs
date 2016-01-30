@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Random = UnityEngine.Random;
 
 public struct Point
 {
@@ -221,4 +222,99 @@ public class GridGraph
         }
         return null;
     }
+
+    /**
+     * @return true iff there is line-of-sight from (x1,y1) to (x2,y2).
+     */
+    public bool DirectionalLineOfSight(int x1, int y1, int x2, int y2, Orientation dir)
+    {
+        if (!LineOfSight(x1, y1, x2, y2)) return false;
+        switch (dir)
+        {
+            case Orientation.UP:
+                return (y1 - y2) > Math.Abs(x1 - x2);
+            case Orientation.DOWN:
+                return (y2 - y1) > Math.Abs(x1 - x2);
+            case Orientation.LEFT:
+                return (x1 - x2) > Math.Abs(y1 - y2);
+            case Orientation.RIGHT:
+                return (x2 - x1) > Math.Abs(y1 - y2);
+        }
+        return true;
+    }
+
+
+
+    /**
+     * @return true iff there is line-of-sight from (x1,y1) to (x2,y2).
+     */
+    public bool LineOfSight(int x1, int y1, int x2, int y2)
+    {
+        int dy = y2 - y1;
+        int dx = x2 - x1;
+
+        int f = 0;
+
+        int signY = 1;
+        int signX = 1;
+        int offsetX = 0;
+        int offsetY = 0;
+
+        if (dy < 0)
+        {
+            dy *= -1;
+            signY = -1;
+            offsetY = -1;
+        }
+        if (dx < 0)
+        {
+            dx *= -1;
+            signX = -1;
+            offsetX = -1;
+        }
+
+        if (dx >= dy)
+        {
+            while (x1 != x2)
+            {
+                f += dy;
+                if (f >= dx)
+                {
+                    if (IsBlocked(x1 + offsetX, y1 + offsetY))
+                        return false;
+                    y1 += signY;
+                    f -= dx;
+                }
+                if (f != 0 && IsBlocked(x1 + offsetX, y1 + offsetY))
+                    return false;
+                if (dy == 0 && IsBlocked(x1 + offsetX, y1) && IsBlocked(x1 + offsetX, y1 - 1))
+                    return false;
+
+                x1 += signX;
+            }
+        }
+        else
+        {
+            while (y1 != y2)
+            {
+                f += dx;
+                if (f >= dy)
+                {
+                    if (IsBlocked(x1 + offsetX, y1 + offsetY))
+                        return false;
+                    x1 += signX;
+                    f -= dy;
+                }
+                if (f != 0 && IsBlocked(x1 + offsetX, y1 + offsetY))
+                    return false;
+                if (dx == 0 && IsBlocked(x1, y1 + offsetY) && IsBlocked(x1 - 1, y1 + offsetY))
+                    return false;
+
+                y1 += signY;
+            }
+        }
+        return true;
+    }
+
+
 }

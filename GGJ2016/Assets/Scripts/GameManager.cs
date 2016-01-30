@@ -86,6 +86,38 @@ public class GameManager : MonoBehaviour
             new Vector3(realMinX, realMaxY, 0));
         Gizmos.DrawLine(new Vector3(realMaxX, realMaxY, 0),
             new Vector3(realMaxX, realMinY, 0));
+
+
+        /*if (houseGrid != null)
+        {
+            int index = ((int)(Time.time * 1.25f) + 15) % (houseGrid.sizeX * houseGrid.sizeY);
+            var ori = (Orientation)(((int) (Time.time*5f) + 60)%4);
+            int px = index%houseGrid.sizeY;
+            int py = index/houseGrid.sizeX;
+
+            GizmosDrawTile(px, py, Color.red);
+            for (int y = 0; y < houseGrid.sizeY; ++y)
+            {
+                for (int x = 0; x < houseGrid.sizeX; ++x)
+                {
+                    if (x == px && y == py) continue;
+                    if (houseGrid.DirectionalLineOfSight(px, py, x, y, ori))
+                    {
+                        GizmosDrawTile(x, y, Color.green);
+                    }
+                }
+            }
+        }*/
+
+    }
+
+    private void GizmosDrawTile(int px, int py, Color col)
+    {
+        if (houseGrid == null) return;
+        var vector = Vector2.zero;
+        houseGrid.ToRealCoordinates(px, py, out vector.x, out vector.y);
+        Gizmos.color = col;
+        Gizmos.DrawSphere(vector, 0.5f);
     }
 
     private void OnGUI()
