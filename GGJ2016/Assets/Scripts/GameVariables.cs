@@ -46,11 +46,19 @@ public class GameVariables
     public const int toiletSinkX = 8;
     public const int toiletSinkY = 7;
 
-    public const int bedSideX = 5;
-    public const int bedSideY = 2;
+    public const int bedSideX = 1;
+    public const int bedSideY = 8;
 
     public const int exitX = 9;
     public const int exitY = 0;
 
 
+
+
+    // Functions
+    public void AddSuspicion(float val)
+    {
+        suspicionLevel += val;
+        suspicionLevel = Mathf.Clamp(suspicionLevel, 0, 1);
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -9,10 +10,15 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField]
 	GameObject gameManager;
 	GridGraph houseGrid;
-	Dictionary<Point, Interactable> interactableHash;
-	Dictionary<Point,PickUpable> pickUpsHash;
+	List<Interactable> interactables;
+	List<PickUp> pickups;
+    private PickUp currentlyHeldPickUp;
 
-	[SerializeField]
+    public Orientation orientation { get; private set; }
+    public int cx { get; private set; }
+    public int cy { get; private set; }
+
+    [SerializeField]
 	float movementCooldown;
 	float cooldownTimer;
 
@@ -20,22 +26,72 @@ public class PlayerMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		houseGrid = gameManager.GetComponent<GameManager>().HouseGrid;
-		interactableHash = gameManager.GetComponent<GameManager>().interactableHash;
-		pickUpsHash = gameManager.GetComponent<GameManager>().pickUpsHash;
+        interactables = gameManager.GetComponent<GameManager>().interactables;
+        pickups = gameManager.GetComponent<GameManager>().pickups;
+
+
+        // Snap to nearest grid position.
+        int x, y;
+        houseGrid.ToGridCoordinates(transform.position.x, transform.position.y, out x, out y);
+        cx = x;
+        cy = y;
+        Vector2 newPosition = Vector2.zero;
+        houseGrid.ToRealCoordinates(cx, cy, out newPosition.x, out newPosition.y);
+        transform.position = newPosition;
 	}
 
 	// Update is called once per frame
-	void FixedUpdate () {
+    private void FixedUpdate()
+    {
+        MovementCheck();
+    }
 
-		MovementCheck();
-		//check if next to interactable
-		InteractableCheck();
-		PickUpableCheck();
-			
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            TryInteract();
+        }	
 	}
 
+    private void TryInteract()
+    {
+        if (currentlyHeldPickUp != null)
+        {
+            // Drop currently held pickup
+            int tx, ty;
+            houseGrid.ToGridCoordinates(transform.position.x, transform.position.y, out tx, out ty);
+            tx += ToMovementX(orientation);
+            ty += ToMovementY(orientation);
+            if (!houseGrid.IsBlocked(tx, ty))
+            {
+                currentlyHeldPickUp.Release(tx, ty);
+                currentlyHeldPickUp = null;
+            }
+            else
+            {
+                Debug.Log("CANNOT DROP");
+            }
+        }
+        else
+        {
+            // Pickup Pickup.
+            var pickup = FindPickUpInFront();
+            if (pickup != null && pickup.CanTake())
+            {
+                currentlyHeldPickUp = pickup.PlayerTake(transform);
+                return;
+            }
+            var interactable = FindInteractableInFront();
+            if (interactable != null)
+            {
+                interactable.Interact();
+                return;
+            }
+        }
+    }
 
-	int ToMovementX(Orientation dir) {
+
+    int ToMovementX(Orientation dir) {
 		switch(dir) {
 		case Orientation.DOWN: return 0;
 		case Orientation.UP: return 0;
@@ -62,117 +118,69 @@ public class PlayerMovement : MonoBehaviour {
 		int dx =0, dy = 0;
 		if (cooldownTimer < 0) {
 			if(Input.GetKey(moveRight)) {
-				var dir = Orientation.RIGHT;
-				dx += ToMovementX(dir);
-				dy += ToMovementY(dir);
+				orientation = Orientation.RIGHT;
+                dx += ToMovementX(orientation);
+                dy += ToMovementY(orientation);
 				this.GetComponent<SpriteRenderer>().sprite = sprites[0];
 			}
 			if(Input.GetKey(moveUp)) {
-				var dir = Orientation.UP;
-				dx += ToMovementX(dir);
-				dy += ToMovementY(dir);
+                orientation = Orientation.UP;
+                dx += ToMovementX(orientation);
+                dy += ToMovementY(orientation);
 				this.GetComponent<SpriteRenderer>().sprite = sprites[1];
 			}
 			if(Input.GetKey(moveLeft)) {
-				var dir = Orientation.LEFT;
-				dx += ToMovementX(dir);
-				dy += ToMovementY(dir);
+                orientation = Orientation.LEFT;
+                dx += ToMovementX(orientation);
+                dy += ToMovementY(orientation);
 				this.GetComponent<SpriteRenderer>().sprite = sprites[2];
 			}
 			if(Input.GetKey(moveDown)) {
-				var dir = Orientation.DOWN;
-				dx += ToMovementX(dir);
-				dy += ToMovementY(dir);
+                orientation = Orientation.DOWN;
+                dx += ToMovementX(orientation);
+                dy += ToMovementY(orientation);
 				this.GetComponent<SpriteRenderer>().sprite = sprites[3];
 			}
 		}
 
 		if (dx != 0 || dy != 0) {
-			if(!houseGrid.IsBlockedActual(this.transform.position.x,this.transform.position.y, dx:dx, dy:dy)) {
-				
-				this.transform.position = new Vector2(this.transform.position.x+dx,this.transform.position.y+dy);
+			if(!houseGrid.IsBlocked(cx+dx,cy+dy))
+			{
+			    cx += dx;
+			    cy += dy;
+			    var newPosition = Vector2.zero;
+			    houseGrid.ToRealCoordinates(cx, cy, out newPosition.x, out newPosition.y);
+			    this.transform.position = newPosition;
+
 				cooldownTimer = movementCooldown;
 			}
 		}
 	}
 
-	void InteractableCheck()
+	Interactable FindInteractableInFront()
 	{
 		int gx, gy;
 		houseGrid.ToGridCoordinates (this.transform.position.x, this.transform.position.y, out gx, out gy);
-		if (interactableHash.ContainsKey (new Point {
-			x = gx + 1,
-			y = gy
-		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [0]) {
-			Debug.Log ("Interactable found GX:" + gx + " GY: " + gy);
-		}
-		if (interactableHash.ContainsKey (new Point {
-			x = gx,
-			y = gy + 1
-		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [1]) {
-			Debug.Log ("Interactable found GX:" + gx + " GY: " + gy);
-		}
-		if (interactableHash.ContainsKey (new Point {
-			x = gx - 1,
-			y = gy
-		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [2]) {
-			Debug.Log ("Interactable found GX:" + gx + " GY: " + gy);
-		}
-		if (interactableHash.ContainsKey (new Point {
-			x = gx,
-			y = gy - 1
-		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [3]) {
-			Debug.Log ("Interactable found GX:" + gx + " GY: " + gy);
-		}
+        int dx = ToMovementX(orientation);
+        int dy = ToMovementY(orientation);
+
+	    return interactables.FirstOrDefault(interactable => interactable.gx == gx + dx && interactable.gy == gy + dy);
 	}
 
-	void PickUpableCheck()
-	{
-		int gx, gy;
-		PickUpable pickUpFound;
-		houseGrid.ToGridCoordinates (this.transform.position.x, this.transform.position.y, out gx, out gy);
-		if (pickUpsHash.ContainsKey (new Point {
-			x = gx + 1,
-			y = gy
-		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [0]) {
-			pickUpsHash.TryGetValue(new Point {
-				x = gx + 1,
-				y = gy}, out pickUpFound);
-			Debug.Log (pickUpFound.getName());
-		}
+	PickUp FindPickUpInFront()
+    {
+        int gx, gy;
+        houseGrid.ToGridCoordinates(this.transform.position.x, this.transform.position.y, out gx, out gy);
+        int dx = ToMovementX(orientation);
+        int dy = ToMovementY(orientation);
 
-		if (pickUpsHash.ContainsKey (new Point {
-			x = gx,
-			y = gy + 1
-		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [1]) {
-			pickUpsHash.TryGetValue(new Point {
-				x = gx,
-				y = gy+ 1}, out pickUpFound);
-			Debug.Log (pickUpFound.getName());
-		}
-
-		if (pickUpsHash.ContainsKey (new Point {
-			x = gx - 1,
-			y = gy
-		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [2]) {
-			pickUpsHash.TryGetValue(new Point {
-				x = gx-1,
-				y = gy}, out pickUpFound);
-			Debug.Log (pickUpFound.getName());
-		}
-
-		if (pickUpsHash.ContainsKey (new Point {
-			x = gx,
-			y = gy - 1
-		}) && this.GetComponent<SpriteRenderer> ().sprite == sprites [3]) {
-			pickUpsHash.TryGetValue(new Point {
-				x = gx,
-				y = gy - 1}, out pickUpFound);
-			Debug.Log (pickUpFound.getName());
-		}
+        return pickups.FirstOrDefault(pickup => pickup.cx == gx + dx && pickup.cy == gy + dy);
 	}
 
+    public bool IsHoldingItem()
+    {
+        return currentlyHeldPickUp != null;
+    }
 
-  
 }
 

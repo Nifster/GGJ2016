@@ -9,6 +9,7 @@ public class CharacterMovement : MonoBehaviour
 
     [SerializeField]
     GameObject gameManager;
+
     GridGraph houseGrid;
 
     private CharacterAI ai;
@@ -26,9 +27,9 @@ public class CharacterMovement : MonoBehaviour
     private float moveEndTime;
 
     private bool isMoving;
-    private Orientation currentOrientation;
-    private int cx;
-    private int cy;
+    public Orientation currentOrientation { get; private set; }
+    public int cx { get; private set; }
+    public int cy { get; private set; }
     private int nextX;
     private int nextY;
 	private Animator characterAnim;
@@ -48,10 +49,13 @@ public class CharacterMovement : MonoBehaviour
     void Start()
     {
         houseGrid = gameManager.GetComponent<GameManager>().HouseGrid;
-        ai = new CharacterAI(this);
+        ai = new CharacterAI(gameManager.GetComponent<GameManager>());
 
         // Snap to nearest grid position.
-        houseGrid.ToGridCoordinates(transform.position.x, transform.position.y, out cx, out cy);
+        int x, y;
+        houseGrid.ToGridCoordinates(transform.position.x, transform.position.y, out x, out y);
+        cx = x;
+        cy = y;
         Vector2 newPosition = Vector2.zero;
         houseGrid.ToRealCoordinates(cx, cy, out newPosition.x, out newPosition.y);
         transform.position = newPosition;
