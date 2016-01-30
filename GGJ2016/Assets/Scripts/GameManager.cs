@@ -97,38 +97,50 @@ public class GameManager : MonoBehaviour
         meterFront = new Texture2D(1, 1);
         meterFront.SetPixel(0, 0, Color.yellow);
 
-        //initialize empty room
-        bool[,] isBlocked = new bool[10, 10];
-        for (int i = 0; i < isBlocked.GetLength(0); i++)
-        {
-            for (int j = 0; j < isBlocked.GetLength(1); j++)
-            {
-                isBlocked[i, j] = false;
-            }
-        }
-
         //set interactable in positions
 
-        isBlocked[0, 8] = true;
-        isBlocked[0, 4] = true;
-        isBlocked[1, 4] = true;
-        isBlocked[2, 4] = true;
-        isBlocked[3, 4] = true;
-        isBlocked[4, 4] = true;
-        isBlocked[0, 5] = true;
-        isBlocked[1, 5] = true;
-        isBlocked[2, 5] = true;
-        isBlocked[3, 5] = true;
-        isBlocked[4, 5] = true;
-        isBlocked[0, 6] = true;
-        isBlocked[1, 6] = true;
-        isBlocked[2, 6] = true;
-        isBlocked[3, 6] = true;
-        isBlocked[4, 6] = true;
-        isBlocked[4, 8] = true;
-        isBlocked[4, 9] = true;
 
-        houseGrid.Initialise(isBlocked, realMinX, realMinY, realMaxX - realMinX, realMaxY - realMinY);
+		var testBool = new int[23,20] {
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+			{1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1},
+			{1,1,1,1,1,1,0,1,0,1,1,1,1,0,0,0,0,1,1,1},
+			{1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1},
+			{1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,1},
+			{1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,1},
+			{1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,1},
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1},
+			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
+			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
+			{0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1},
+			{0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1},
+			{1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+
+		};
+
+		var initBool = new bool[23,20];
+		for(int i = 0; i<23;i++){
+			for(int j=0; j<20;j++){
+				if(testBool[i,j] == 1){
+					initBool[i,j] = true;
+				}else{
+					initBool[i,j] = false;
+				}
+			}
+		}
+			
+		houseGrid.Initialise(initBool, realMinX, realMinY, realMaxX - realMinX, realMaxY - realMinY);
+
+
 
 
         //initialise interactables
@@ -150,17 +162,17 @@ public class GameManager : MonoBehaviour
     {
         pickups = new PickUp[]
         {
-            new PickUp(PickUpType.Toothbrush, 0, 0, prefab_pickup),
-            new PickUp(PickUpType.Milk, 1, 0, prefab_pickup),
-            new PickUp(PickUpType.Cereal, 2, 0, prefab_pickup),
-            new PickUp(PickUpType.Bowl, 3, 0, prefab_pickup),
-            new PickUp(PickUpType.Coffee, 4, 0, prefab_pickup),
-            new PickUp(PickUpType.Clothes, 5, 0, prefab_pickup),
-            new PickUp(PickUpType.Newspaper, 6, 0, prefab_pickup),
-            new PickUp(PickUpType.Keys, 7, 0, prefab_pickup),
-            new PickUp(PickUpType.Wallet, 8, 0, prefab_pickup),
-            new PickUp(PickUpType.Briefcase, 9, 0, prefab_pickup),
-            new PickUp(PickUpType.Shoes, 10, 0, prefab_pickup),
+            new PickUp(PickUpType.Toothbrush, 2, 7, prefab_pickup),
+            new PickUp(PickUpType.Milk, 9, 6, prefab_pickup),
+            new PickUp(PickUpType.Cereal, 9, 3, prefab_pickup),
+            new PickUp(PickUpType.Bowl, 16, 6, prefab_pickup),
+            new PickUp(PickUpType.Coffee, 13, 6, prefab_pickup),
+            new PickUp(PickUpType.Clothes, 4, 17, prefab_pickup),
+            new PickUp(PickUpType.Newspaper, 19, 2, prefab_pickup),
+            new PickUp(PickUpType.Keys, 15, 3, prefab_pickup),
+            new PickUp(PickUpType.Wallet, 14, 3, prefab_pickup),
+            new PickUp(PickUpType.Briefcase, 13, 3, prefab_pickup),
+            new PickUp(PickUpType.Shoes, 21, 3, prefab_pickup),
         }.ToDictionary(p => p.type);
     }
 
@@ -173,7 +185,7 @@ public class GameManager : MonoBehaviour
         Gizmos.DrawLine(new Vector3(realMaxX, realMaxY, 0),
             new Vector3(realMinX, realMaxY, 0));
         Gizmos.DrawLine(new Vector3(realMaxX, realMaxY, 0),
-            new Vector3(realMaxX, realMinY, 0));
+			new Vector3(realMaxX, realMinY, 0));
 
 
         /*if (houseGrid != null)
@@ -199,14 +211,13 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void GizmosDrawTile(int px, int py, Color col)
-    {
-        if (houseGrid == null) return;
-        var vector = Vector2.zero;
-        houseGrid.ToRealCoordinates(px, py, out vector.x, out vector.y);
-        Gizmos.color = col;
-        Gizmos.DrawSphere(vector, 0.5f);
-    }
+	private void GizmosDrawTile(int px, int py, Color col, GridGraph ggraph)
+	{
+		var vector = Vector2.zero;
+		ggraph.ToRealCoordinates(px, py, out vector.x, out vector.y);
+		Gizmos.color = col;
+		Gizmos.DrawSphere(vector, 0.5f);
+	}
 
     private void OnGUI()
     {
