@@ -32,6 +32,7 @@ public class CharacterMovement : MonoBehaviour
     private int cy;
     private int nextX;
     private int nextY;
+	private Animator characterAnim;
 
     private void OnDrawGizmos()
     {
@@ -55,6 +56,9 @@ public class CharacterMovement : MonoBehaviour
         Vector2 newPosition = Vector2.zero;
         houseGrid.ToRealCoordinates(cx, cy, out newPosition.x, out newPosition.y);
         transform.position = newPosition;
+
+		//get character animator
+		characterAnim = this.GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
@@ -87,10 +91,23 @@ public class CharacterMovement : MonoBehaviour
 
     private void UpdateFacingDirection()
     {
-        if (nextX > cx) FaceDirection(Orientation.RIGHT);
-        if (nextX < cx) FaceDirection(Orientation.LEFT);
-        if (nextY > cy) FaceDirection(Orientation.DOWN);
-        if (nextY < cy) FaceDirection(Orientation.UP);
+		if (nextX > cx){
+			FaceDirection(Orientation.RIGHT);
+			characterAnim.SetInteger("dir",(int)Orientation.RIGHT);
+		}
+		if (nextX < cx){
+			FaceDirection(Orientation.LEFT);
+			characterAnim.SetInteger("dir",(int)Orientation.LEFT);
+		}
+
+		if (nextY > cy) {
+			FaceDirection(Orientation.UP);
+			characterAnim.SetInteger("dir",(int)Orientation.UP);
+		}
+		if (nextY < cy) {
+			FaceDirection(Orientation.DOWN);
+			characterAnim.SetInteger("dir",(int)Orientation.DOWN);
+		}
     }
 
     public void SetOnStepAction(Action action)
