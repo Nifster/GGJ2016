@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour {
 	GridGraph houseGrid;
 	Dictionary<Point, Interactable> interactableHash;
 	Dictionary<Point,PickUp> pickUpsHash;
+    private PickUp currentlyHeldPickUp;
+
     private Orientation orientation;
 
 	[SerializeField]
@@ -26,25 +28,57 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void FixedUpdate () {
+    private void FixedUpdate()
+    {
+        MovementCheck();
+    }
 
-		MovementCheck();
-		//check if next to interactable
-		var inter = FindInteractableInFront();
-	    if (inter != null)
-	    {
-	        Debug.Log("interactable");
-	    }
-        var pickup = FindPickUpInFront();
-        if (pickup != null)
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("pickup");
-        }
-			
+            TryInteract();
+        }	
 	}
 
+    private void TryInteract()
+    {
+        if (currentlyHeldPickUp != null)
+        {
+            // Drop currently held pickup
+            int tx, ty;
+            houseGrid.ToGridCoordinates(transform.position.x, transform.position.y, out tx, out ty);
+            tx += ToMovementX(orientation);
+            ty += ToMovementY(orientation);
+            if (!houseGrid.IsBlocked(tx, ty))
+            {
+                currentlyHeldPickUp.Release(tx, ty);
+                currentlyHeldPickUp = null;
+            }
+            else
+            {
+                Debug.Log("CANNOT DROP");
+            }
+        }
+        else
+        {
+            // Pickup Pickup.
+            var pickup = FindPickUpInFront();
+            if (pickup != null && pickup.CanTake())
+            {
+                currentlyHeldPickUp = pickup.PlayerTake();
+                return;
+            }
+            var interactable = FindInteractableInFront();
+            if (interactable != null)
+            {
+                interactable.Interact();
+                return;
+            }
+        }
+    }
 
-	int ToMovementX(Orientation dir) {
+
+    int ToMovementX(Orientation dir) {
 		switch(dir) {
 		case Orientation.DOWN: return 0;
 		case Orientation.UP: return 0;

@@ -25,6 +25,11 @@ public class Interactable{
 	public bool isUsed(){
 		return this.used;
 	}
+
+    public void Interact()
+    {
+        Debug.Log("Interact!");
+    }
 }	
 
 

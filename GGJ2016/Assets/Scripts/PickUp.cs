@@ -74,4 +74,9 @@ public class PickUp {
         this.status = PickUpStatus.PlayerHeld;
         return this;
     }
+
+    public bool CanTake()
+    {
+        return this.status == PickUpStatus.Unheld;
+    }
 }
