@@ -72,7 +72,7 @@ public class GameVariables
     public const int couchY = 13;
 
 
-    public const float coffeeMakeTime = 40f;
+    public const float coffeeMakeTime = 60f;
 
     // Functions
     public void AddSuspicion(float val)

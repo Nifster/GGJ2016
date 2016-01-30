@@ -383,7 +383,8 @@ public class CharacterAI {
 
     private float WeightGetClothes()
     {
-        if (IsHolding(PickUpType.Coffee)) return -100f;
+        if (IsHolding(PickUpType.Coffee)) return -10f;
+        if (IsHolding(PickUpType.Clothes)) return -100f;
 
         float value = 0.7f;
         if (!gameVars.ateCereal) value -= 0.2f;
@@ -392,6 +393,7 @@ public class CharacterAI {
 
     private float WeightChangeClothes()
     {
+        if (gameVars.changedClothes) return -100f;
         if (!IsHolding(PickUpType.Clothes)) return -100f;
         if (IsHolding(PickUpType.Coffee)) return -100f;
 
@@ -412,6 +414,7 @@ public class CharacterAI {
 
     private float WeightGetCoffee()
     {
+        if (IsHolding(PickUpType.Clothes)) return -10f;
         if (!gameVars.coffeeFinished) return -100f;
         if (IsHolding(PickUpType.Coffee)) return -100f;
 
