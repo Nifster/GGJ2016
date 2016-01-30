@@ -31,21 +31,21 @@ public class GameVariables
 
 
     // Constants
-    public const int toiletBowlX = 5;
-    public const int toiletBowlY = 2;
+    public const int toiletBowlX = 6;
+    public const int toiletBowlY = 6;
 
-    public const int toiletSinkX = 8;
-    public const int toiletSinkY = 7;
+    public const int toiletSinkX = 4;
+    public const int toiletSinkY = 8;
 
     
-    public const int bedSideX = 1;
-    public const int bedSideY = 8;
+    public const int bedSideX = 2;
+    public const int bedSideY = 15;
 
     public const int exitX = 9;
     public const int exitY = 0;
 
-    public const int searchRoomX = 0;
-    public const int searchRoomY = 0;
+    public const int searchRoomX = 3;
+    public const int searchRoomY = 15;
 
 
 
