@@ -9,10 +9,43 @@ public class GameVariables
     
     public bool madeBed = false;
 
+    public bool isHoldingMilk = false;
+    public bool isMilkOnDiningTable = false;
+    public bool thinksMilkOnDiningTable = false;
+
+    public bool isHoldingCereal = false;
+    public bool isHoldingBowl = false;
+    public bool madeCerealOnTable = false;
+    public bool ateCereal = false;
+
+    public bool isCoffeeBeingMade = false;
+    public bool thinksCoffeeBeingMAde = false;
+    public bool isHoldingClothes = false;
+    public bool changedClothes = false;
+
+    public bool isHoldingNewspaper = false;
+    public bool isHoldingCoffee = false;
+
+    public bool hasReadNewsPapers = false;
+    public bool hasDrankCoffee = false;
+
+    public bool isHoldingKeysAndWallet = false;
+    public bool isHoldingBriefcase = false;
+
+    public bool wornShoes = false;
+    public bool leftHouse = false;
+
 
 
     // Constants
-    public const int toiletX = 5;
-    public const int toiletY = 2;
+    public const int toiletBowlX = 5;
+    public const int toiletBowlY = 2;
+
+    public const int toiletSinkX = 8;
+    public const int toiletSinkY = 7;
+
+    public const int bedSideX = 5;
+    public const int bedSideY = 2;
+
 
 }

@@ -111,13 +111,13 @@ public class CharacterAI {
 
     private float WeightBrushTeeth()
     {
-
+        if (gameVars.brushedTeeth) return -1f;
         return 0.5f;;
     }
 
     private float WeightMakeBed()
     {
-
+        if (gameVars.madeBed) return -1f;
         return 0.5f;
     }
 
@@ -126,25 +126,25 @@ public class CharacterAI {
 
 #region Update Functions
 
-    private void UpdateGoToilet()
+    private void DefaultUpdateFunction(int targetX, int targetY, CharacterMovement.OnReachDestinationFunction onReach, JobType jobType, Action<GameVariables> gameVariableChanges)
     {
         switch (charState.state)
         {
             case State.WALKING:
-                if (!characterMovement.TargetMatches(GameVariables.toiletX, GameVariables.toiletY))
+                if (!characterMovement.TargetMatches(targetX, targetY))
                 {
-                    characterMovement.SetOnStepAction(() => PathFindTowards(GameVariables.toiletX, GameVariables.toiletY, OnReachGoToilet));
+                    characterMovement.SetOnStepAction(() => PathFindTowards(targetX, targetY, onReach));
                 }
                 break;
             case State.STANDING:
-                PathFindTowards(GameVariables.toiletX, GameVariables.toiletY, OnReachGoToilet);
+                PathFindTowards(targetX, targetY, onReach);
                 break;
             case State.DOING_JOB:
-                if (charState.currentJobType == JobType.GO_TOILET)
+                if (charState.currentJobType == jobType)
                 {
                     if (charState.JobDone)
                     {
-                        gameVars.usedToilet = true;
+                        gameVariableChanges(gameVars);
                         charState.SetState(State.STANDING);
                     }
                 }
@@ -157,14 +157,47 @@ public class CharacterAI {
         }
     }
 
+    private void UpdateGoToilet()
+    {
+        DefaultUpdateFunction(
+            GameVariables.toiletBowlX, 
+            GameVariables.toiletBowlY,
+            OnReachGoToilet,
+            JobType.GO_TOILET,
+            (gameVars) =>
+            {
+                gameVars.usedToilet = true;
+            }
+        );
+    }
+
+
     private void UpdateBrushTeeth()
     {
-
+        DefaultUpdateFunction(
+            GameVariables.toiletSinkX,
+            GameVariables.toiletSinkY,
+            OnReachBrushTeeth,
+            JobType.BRUSH_TEETH,
+            (gameVars) =>
+            {
+                gameVars.brushedTeeth = true;
+            }
+        );
     }
 
     private void UpdateMakeBed()
     {
-
+        DefaultUpdateFunction(
+            GameVariables.bedSideX,
+            GameVariables.bedSideY,
+            OnReachMakeBed,
+            JobType.MAKE_BED,
+            (gameVars) =>
+            {
+                gameVars.madeBed = true;
+            }
+        );
     }
 
 
@@ -175,17 +208,17 @@ public class CharacterAI {
 
     private void OnReachGoToilet(int cx, int cy)
     {
-        charState.StartJob(JobType.GO_TOILET, 5f);
+        charState.StartJob(JobType.GO_TOILET, 3f);
     }
 
     private void OnReachBrushTeeth(int cx, int cy)
     {
-
+        charState.StartJob(JobType.BRUSH_TEETH, 4f);
     }
 
     private void OnReachMakeBed(int cx, int cy)
     {
-
+        charState.StartJob(JobType.MAKE_BED, 5f);
     }
 
 
