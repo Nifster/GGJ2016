@@ -72,12 +72,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
 	float realMinX, realMinY, realMaxX, realMaxY;
-
-	[SerializeField]
-	TextAsset floorPlan;
-
-	[SerializeField]
-	GameObject floorPrefab;
 	// Use this for initialization
 
     public List<Interactable> interactables = new List<Interactable>();
@@ -105,7 +99,7 @@ public class GameManager : MonoBehaviour
 
         //set interactable in positions
 
-<<<<<<< HEAD
+
 		var testBool = new int[23,20] {
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 			{1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1},
@@ -146,27 +140,7 @@ public class GameManager : MonoBehaviour
 			
 		houseGrid.Initialise(initBool, realMinX, realMinY, realMaxX - realMinX, realMaxY - realMinY);
 
-=======
-        isBlocked[0, 8] = true;
-        isBlocked[0, 4] = true;
-        isBlocked[1, 4] = true;
-        isBlocked[2, 4] = true;
-        isBlocked[3, 4] = true;
-        isBlocked[4, 4] = true;
-        isBlocked[0, 5] = true;
-        isBlocked[1, 5] = true;
-        isBlocked[2, 5] = true;
-        isBlocked[3, 5] = true;
-        isBlocked[4, 5] = true;
-        isBlocked[0, 6] = true;
-        isBlocked[1, 6] = true;
-        isBlocked[2, 6] = true;
-        isBlocked[3, 6] = true;
-        isBlocked[4, 6] = true;
-        isBlocked[4, 8] = true;
-        isBlocked[4, 9] = true;
 
-        houseGrid.Initialise(isBlocked, realMinX, realMinY, realMaxX - realMinX, realMaxY - realMinY);
 
 
         //initialise interactables
@@ -192,7 +166,7 @@ public class GameManager : MonoBehaviour
             new PickUp(PickUpType.Briefcase, 9, 0, prefab_pickup),
             new PickUp(PickUpType.Shoes, 10, 0, prefab_pickup),
         }.ToList();
->>>>>>> 8c2de3a5a5fba54ac307aad9a0872ef5a8af7a98
+
     }
 
     private void OnDrawGizmos()

@@ -27999,12 +27999,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae3647cfab7f1e439cda547dad3d673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab_pickup: {fileID: 180142, guid: 61fe23a075219a143ba3044ddf63a422, type: 2}
+  playerObject: {fileID: 562304385}
+  characterObject: {fileID: 1615262352}
   realMinX: 0
   realMinY: 0
   realMaxX: 23
   realMaxY: 20
-  floorPlan: {fileID: 4900000, guid: 738064ca7e1b9ef49bfbffc95283bf50, type: 3}
-  floorPrefab: {fileID: 104454, guid: 899fde5984fb0db44b03050d443e194c, type: 2}
 --- !u!4 &2038361808
 Transform:
   m_ObjectHideFlags: 0
@@ -28729,29 +28730,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-<<<<<<< HEAD
 --- !u!4 &2076992408
-=======
---- !u!114 &2038361807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2038361806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dae3647cfab7f1e439cda547dad3d673, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefab_pickup: {fileID: 180142, guid: 61fe23a075219a143ba3044ddf63a422, type: 2}
-  playerObject: {fileID: 562304385}
-  characterObject: {fileID: 1615262352}
-  realMinX: -5
-  realMinY: -5
-  realMaxX: 5
-  realMaxY: 5
---- !u!4 &2038361808
->>>>>>> 8c2de3a5a5fba54ac307aad9a0872ef5a8af7a98
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
