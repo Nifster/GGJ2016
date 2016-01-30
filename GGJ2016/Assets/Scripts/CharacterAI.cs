@@ -115,7 +115,10 @@ public class CharacterAI {
         var ch = character;
         if (houseGrid.DirectionalLineOfSight(ch.cx, ch.cy, player.cx, player.cy, ch.currentOrientation))
         {
-            gameVars.AddSuspicion(0.01f);
+            if (player.IsHoldingItem())
+            {
+                gameVars.AddSuspicion(0.04f);
+            }
         }
     }
 

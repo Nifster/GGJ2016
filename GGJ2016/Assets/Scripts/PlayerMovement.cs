@@ -177,7 +177,10 @@ public class PlayerMovement : MonoBehaviour {
         return pickups.FirstOrDefault(pickup => pickup.cx == gx + dx && pickup.cy == gy + dy);
 	}
 
+    public bool IsHoldingItem()
+    {
+        return currentlyHeldPickUp != null;
+    }
 
-  
 }
 
