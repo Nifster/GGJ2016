@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour {
 	float movementCooldown;
 	float cooldownTimer;
 
+	Animator playerAnim;
+
 	public List<Sprite> sprites = new List<Sprite>();
 	// Use this for initialization
 	void Start () {
@@ -38,6 +40,8 @@ public class PlayerMovement : MonoBehaviour {
         Vector2 newPosition = Vector2.zero;
         houseGrid.ToRealCoordinates(cx, cy, out newPosition.x, out newPosition.y);
         transform.position = newPosition;
+
+		playerAnim = this.GetComponent<Animator>();
 	}
 
 	// Update is called once per frame
@@ -103,6 +107,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	int ToMovementY(Orientation dir) {
+		playerAnim.SetInteger("dir",(int)dir);
 		switch(dir) {
 		case Orientation.DOWN: return -1;
 		case Orientation.UP: return 1;
