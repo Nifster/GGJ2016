@@ -6,6 +6,9 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    private const bool DEBUG_MODE = true;
+
+
     [SerializeField] private GameObject prefab_pickup;
 
     [SerializeField]
@@ -244,8 +247,18 @@ public class GameManager : MonoBehaviour
 
     // Update is called once per frame
 	void Update () {
-
-    }
+	    if (DEBUG_MODE)
+	    {
+	        if (Input.GetKey(KeyCode.LeftShift))
+	        {
+	            Time.timeScale = 20.0f;
+	        }
+	        else
+	        {
+                Time.timeScale = 1.0f;
+	        }
+	    }
+	}
 
 
     #region Interact Actions
