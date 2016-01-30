@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject prefab_pickup;
 
     public static GameManager Instance { get; private set; }
-
     private void Awake()
     {
         Instance = this;
@@ -18,6 +17,7 @@ public class GameManager : MonoBehaviour
     public static string debugStatusText;
 
     private GridGraph houseGrid;
+    private GameVariables gameVars;
 
     public GridGraph HouseGrid
     {
@@ -25,6 +25,15 @@ public class GameManager : MonoBehaviour
         {
             Initialise();
             return houseGrid;
+        }
+    }
+
+    public GameVariables GameVars
+    {
+        get
+        {
+            Initialise();
+            return gameVars;
         }
     }
 
@@ -46,6 +55,7 @@ public class GameManager : MonoBehaviour
     {
         if (houseGrid != null) return;
         houseGrid = new GridGraph();
+        gameVars = new GameVariables();
 
         //initialize empty room
         bool[,] isBlocked = new bool[10, 10];

@@ -13,10 +13,10 @@ public class CharacterAI {
     private readonly CharacterMovement characterMovement;
 
 
-    public CharacterAI(CharacterMovement characterMovement)
+    public CharacterAI(CharacterMovement characterMovement, GameVariables gameVars)
     {
         this.characterMovement = characterMovement;
-        gameVars = new GameVariables();
+        this.gameVars = gameVars;
         charState = new CharacterState();
 
         weightFunctions = new Dictionary<DecisionType, WeightFunction>

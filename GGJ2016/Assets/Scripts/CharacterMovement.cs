@@ -48,7 +48,7 @@ public class CharacterMovement : MonoBehaviour
     void Start()
     {
         houseGrid = gameManager.GetComponent<GameManager>().HouseGrid;
-        ai = new CharacterAI(this);
+        ai = new CharacterAI(this, gameManager.GetComponent<GameManager>().GameVars);
 
         // Snap to nearest grid position.
         houseGrid.ToGridCoordinates(transform.position.x, transform.position.y, out cx, out cy);
