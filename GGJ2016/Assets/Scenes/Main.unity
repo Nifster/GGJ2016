@@ -8146,7 +8146,7 @@ GameObject:
   - 212: {fileID: 1615262354}
   - 114: {fileID: 1615262353}
   m_Layer: 0
-  m_Name: Balloons_01_128x128_Alt_01_006
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8189,7 +8189,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: d135ebe200fc9e34fb260c63defdbd83, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

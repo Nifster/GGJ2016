@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour {
 		MovementCheck();
 		//check if next to interactable
 		int gx, gy;
-		houseGrid.ToGridCoordinates(this.transform.position.x-1,this.transform.position.y-1,out gx,out gy);
+		houseGrid.ToGridCoordinates(this.transform.position.x,this.transform.position.y,out gx,out gy);
 		//Debug.Log("GX: "+gx);
 		//Debug.Log("GY: "+gy);
 		if(interactableHash.ContainsKey(new Point{x=gx+1,y=gy}) && this.GetComponent<SpriteRenderer>().sprite == sprites[0]){
