@@ -21,8 +21,9 @@ public class GameVariables
     public bool ateCereal = false;
 
     public bool isCoffeeBeingMade = false;
-    public bool pastCoffeeDoneTime = false;
-    public bool thinksCoffeeBeingMAde = false;
+    public float coffeeFinishTime = float.PositiveInfinity;
+    public bool coffeeFinished = false;
+    
     public bool changedClothes = false;
 
     public bool hasReadNewsPapers = false;
@@ -44,7 +45,7 @@ public class GameVariables
 
     
     public const int bedSideX = 2;
-    public const int bedSideY = 15;
+    public const int bedSideY = 16;
 
     public const int exitX = 19;
     public const int exitY = 0;
@@ -55,11 +56,23 @@ public class GameVariables
     public const int diningTableX = 19;
     public const int diningTableY = 13;
 
-    public const int diSningTableNextToX = 19;
+    public const int diningTableNextToX = 19;
     public const int diningTableNextToY = 14;
 
+    public const int coffeeMachineX = 11;
+    public const int coffeeMachineY = 5;
+
+    public const int wardrobeX = 6;
+    public const int wardrobeY = 16;
+
+    public const int changeLocationX = 7;
+    public const int changeLocationY = 16;
+
+    public const int couchX = 12;
+    public const int couchY = 13;
 
 
+    public const float coffeeMakeTime = 40f;
 
     // Functions
     public void AddSuspicion(float val)

@@ -34,13 +34,23 @@ public class CharacterAI {
             {DecisionType.MakeBed, WeightMakeBed},
             {DecisionType.GoToilet, WeightGoToilet},        
             {DecisionType.BrushTeeth, WeightBrushTeeth},    
-            {DecisionType.GetToothBrush, WeightFindToothbrush},    
+            {DecisionType.GetToothBrush, WeightFindToothbrush},
+
             {DecisionType.GetMilk, WeightGetMilk},
             {DecisionType.PutMilkOnDiningTable, WeightPutMilkOnDiningTable},
             {DecisionType.GetCereal, WeightGetCereal},
             {DecisionType.GetBowl, WeightGetBowl},
             {DecisionType.EatCereal, WeightEatCereal},
-
+            
+            {DecisionType.StartMakingCoffee, WeightStartMakingCoffee},
+            {DecisionType.GetClothes, WeightGetClothes},
+            {DecisionType.ChangeClothes, WeightChangeClothes},
+            {DecisionType.GetNewspaper, WeightGetNewspaper},
+            {DecisionType.GetCoffee, WeightGetCoffee},
+            {DecisionType.SitOnCouch, WeightSitOnCouch},
+            {DecisionType.GetKeysAndWallet, WeightGetKeysAndWallet},
+            {DecisionType.GetBriefcase, WeightGetBriefcase},
+            {DecisionType.GetShoes, WeightGetShoes},
 
             {DecisionType.LeaveHouse, WeightLeaveHouse},
         };
@@ -57,8 +67,16 @@ public class CharacterAI {
             {DecisionType.GetCereal, UpdateGetCereal},
             {DecisionType.GetBowl, UpdateGetBowl},
             {DecisionType.EatCereal, UpdateEatCereal},
-
-
+            
+            {DecisionType.StartMakingCoffee, UpdateStartMakingCoffee},
+            {DecisionType.GetClothes, UpdateGetClothes},
+            {DecisionType.ChangeClothes, UpdateChangeClothes},
+            {DecisionType.GetNewspaper, UpdateGetNewspaper},
+            {DecisionType.GetCoffee, UpdateGetCoffee},
+            {DecisionType.SitOnCouch, UpdateSitOnCouch},
+            {DecisionType.GetKeysAndWallet, UpdateGetKeysAndWallet},
+            {DecisionType.GetBriefcase, UpdateGetBriefcase},
+            {DecisionType.GetShoes, UpdateGetShoes},
 
             {DecisionType.LeaveHouse, UpdateLeaveHouse},
         };
@@ -105,6 +123,17 @@ public class CharacterAI {
 
     public void Update()
     {
+        if (gameVars.isCoffeeBeingMade && !gameVars.coffeeFinished)
+        {
+            if (Time.time > gameVars.coffeeFinishTime)
+            {
+                gameVars.coffeeFinished = true;
+                gameManager.pickups[PickUpType.Coffee].Activate();
+            }
+        }
+
+
+
         var decision = MakeDecision();
 
         if (updateFunctions.ContainsKey(decision))
@@ -268,7 +297,7 @@ public class CharacterAI {
         return 1f;
     }
 
-    private float WeightFindToothbrush()  // NEXT: IMPLEMENT UpdateFindToothBrush -> toothbrush finding logic  ||| and OnReachFindToothBrush() <-- pickup if within +.
+    private float WeightFindToothbrush()
     {
         if (IsHolding(PickUpType.Toothbrush)) return -100f;
         if (gameVars.brushedTeeth) return -1f;
@@ -314,6 +343,10 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Cereal)) return -100f;
         if (!ThinksMilkIsOnDiningTable()) return 0f;
         if (gameVars.isLate) return 0.1f;
+        if (!HasBeliefInLocation(PickUpType.Cereal) && !CanSee(PickUpType.Cereal))
+        {
+            return -0.4f;
+        }
         return 0.71f;
     }
 
@@ -323,6 +356,10 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Bowl)) return -100f;
         if (!ThinksMilkIsOnDiningTable()) return 0f;
         if (gameVars.isLate) return 0.1f;
+        if (!HasBeliefInLocation(PickUpType.Bowl) && !CanSee(PickUpType.Bowl))
+        {
+            return -0.4f;
+        }
         return 0.7f;
     }
 
@@ -336,6 +373,8 @@ public class CharacterAI {
 
     private float WeightStartMakingCoffee()
     {
+        if (gameVars.isCoffeeBeingMade) return -100f;
+
         float value = 0.7f;
         if (!ThinksMilkIsOnDiningTable()) return 0f;
         if (gameVars.isLate) value -= 0.6f;
@@ -344,7 +383,7 @@ public class CharacterAI {
 
     private float WeightGetClothes()
     {
-        if (!IsHolding(PickUpType.Coffee)) return -100f;
+        if (IsHolding(PickUpType.Coffee)) return -100f;
 
         float value = 0.7f;
         if (!gameVars.ateCereal) value -= 0.2f;
@@ -354,15 +393,17 @@ public class CharacterAI {
     private float WeightChangeClothes()
     {
         if (!IsHolding(PickUpType.Clothes)) return -100f;
-        if (!IsHolding(PickUpType.Coffee)) return -100f;
+        if (IsHolding(PickUpType.Coffee)) return -100f;
 
         float value = 0.8f;
         if (!gameVars.ateCereal) value -= 0.2f;
         return value;
     }
 
-    private float WeightGetNewsPaper()
+    private float WeightGetNewspaper()
     {
+        if (IsHolding(PickUpType.Newspaper)) return -100f;
+
         float value = 0.6f;
         if (!gameVars.changedClothes) value -= 0.3f;
         if (gameVars.isLate) value -= 0.7f;
@@ -371,8 +412,11 @@ public class CharacterAI {
 
     private float WeightGetCoffee()
     {
+        if (!gameVars.coffeeFinished) return -100f;
+        if (IsHolding(PickUpType.Coffee)) return -100f;
+
         float value = 0.6f;
-        if (gameVars.pastCoffeeDoneTime) value += 0.5f;
+        if (gameVars.coffeeFinished) value += 0.5f;
         if (gameVars.isCoffeeBeingMade) value += 0.3f;
         if (!gameVars.changedClothes) value -= 0.3f;
         if (gameVars.isLate) value -= 0.7f;
@@ -390,6 +434,8 @@ public class CharacterAI {
 
     private float WeightGetKeysAndWallet()
     {
+        if (IsHolding(PickUpType.Keys)) return -100f;
+
         float value = 0.7f;
         if (gameVars.hasDrankCoffee) value += 0.3f;
         if (gameVars.hasReadNewsPapers) value += 0.3f;
@@ -400,6 +446,8 @@ public class CharacterAI {
 
     private float WeightGetBriefcase()
     {
+        if (IsHolding(PickUpType.Briefcase)) return -100f;
+
         float value = 0.9f;
         if (!IsHolding(PickUpType.Keys)) value -= 0.3f;
         if (gameVars.hasDrankCoffee) value += 0.3f;
@@ -411,8 +459,11 @@ public class CharacterAI {
 
     private float WeightGetShoes()
     {
+        if (IsHolding(PickUpType.Shoes)) return -100f;
+
         float value = 0.8f;
-        if (IsHolding(PickUpType.Briefcase)) value -= 0.1f;
+        if (!IsHolding(PickUpType.Keys)) value -= 0.2f;
+        if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
         if (gameVars.isLate) value -= 0;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
         return value;
@@ -423,8 +474,8 @@ public class CharacterAI {
     {
         float value = 0.2f;
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
-        if (!IsHolding(PickUpType.Keys)) value -= 0.2f;
-        if (!IsHolding(PickUpType.Shoes)) value -= 0.1f;
+        if (!IsHolding(PickUpType.Keys)) value -= 0.1f;
+        if (!IsHolding(PickUpType.Shoes)) value -= 0.2f;
         if (!gameVars.changedClothes) value -= 0.2f;
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
         if (!IsHolding(PickUpType.Keys)) value -= 0.2f;
@@ -547,7 +598,7 @@ public class CharacterAI {
     private void UpdatePutMilkOnDiningTable()
     {
         DefaultUpdateFunction(
-            GameVariables.diSningTableNextToX,
+            GameVariables.diningTableNextToX,
             GameVariables.diningTableNextToY,
             Orientation.DOWN,
             OnReachPutMilkOnDiningTable,
@@ -578,7 +629,7 @@ public class CharacterAI {
     private void UpdateEatCereal()
     {
         DefaultUpdateFunction(
-            GameVariables.diSningTableNextToX,
+            GameVariables.diningTableNextToX,
             GameVariables.diningTableNextToY,
             Orientation.DOWN,
             OnReachEatCereal,
@@ -598,6 +649,18 @@ public class CharacterAI {
 
     private void UpdateStartMakingCoffee()
     {
+        DefaultUpdateFunction(
+            GameVariables.coffeeMachineX,
+            GameVariables.coffeeMachineY,
+            Orientation.UP,
+            OnReachStartMakingCoffee,
+            JobType.START_MAKING_COFFEE,
+            (gameVars) =>
+            {
+                gameVars.isCoffeeBeingMade = true;
+                gameVars.coffeeFinishTime = Time.time + GameVariables.coffeeMakeTime;
+            }
+        );
     }
 
     private void UpdateGetClothes()
@@ -608,6 +671,17 @@ public class CharacterAI {
 
     private void UpdateChangeClothes()
     {
+        DefaultUpdateFunction(
+            GameVariables.changeLocationX,
+            GameVariables.changeLocationY,
+            Orientation.RIGHT,
+            OnReachChangeClothes,
+            JobType.CHANGE_CLOTHES,
+            (gameVars) =>
+            {
+                gameVars.changedClothes = true;
+            }
+        );
     }
 
 
@@ -618,10 +692,56 @@ public class CharacterAI {
     }
 
 
-    private void UpdateSitOnCouch()
+    private void UpdateGetCoffee()
     {
+        var pickup = gameManager.pickups[PickUpType.Coffee];
+        GrabItemUpdateFunction(pickup.believedX, pickup.believedY, OnReachGetCoffee);
     }
 
+
+    private void UpdateSitOnCouch()
+    {
+        DefaultUpdateFunction(
+            GameVariables.couchX,
+            GameVariables.couchY,
+            Orientation.RIGHT,
+            OnReachSitOnCouch,
+            JobType.SIT_ON_COUCH,
+            (gameVars) =>
+            {
+                if (IsHolding(PickUpType.Coffee))
+                {
+                    gameVars.hasDrankCoffee = true;
+                    DropItem(PickUpType.Coffee);
+                    gameManager.pickups[PickUpType.Coffee].Deactivate();
+                }
+                if (IsHolding(PickUpType.Newspaper))
+                {
+                    gameVars.hasReadNewsPapers = true;
+                    DropItem(PickUpType.Newspaper);
+                }
+            }
+        );
+    }
+
+
+    private void UpdateGetKeysAndWallet()
+    {
+        var pickup = gameManager.pickups[PickUpType.Keys];
+        GrabItemUpdateFunction(pickup.believedX, pickup.believedY, OnReachGetKeysAndWallet);
+    }
+
+    private void UpdateGetBriefcase()
+    {
+        var pickup = gameManager.pickups[PickUpType.Briefcase];
+        GrabItemUpdateFunction(pickup.believedX, pickup.believedY, OnReachGetBriefcase);
+    }
+
+    private void UpdateGetShoes()
+    {
+        var pickup = gameManager.pickups[PickUpType.Shoes];
+        GrabItemUpdateFunction(pickup.believedX, pickup.believedY, OnReachGetShoes);
+    }
 
     private void UpdateMakeBed()
     {
@@ -716,10 +836,50 @@ public class CharacterAI {
         if (!result) LoseBeliefInLocation(PickUpType.Clothes);
     }
 
+    private void OnReachChangeClothes(int cx, int cy)
+    {
+        charState.StartJob(JobType.CHANGE_CLOTHES, 5f);
+    }
+
+    private void OnReachGetCoffee(int cx, int cy)
+    {
+        bool result = TryTakeItem(PickUpType.Coffee);
+        if (!result) LoseBeliefInLocation(PickUpType.Coffee);
+    }
+
+
     private void OnReachGetNewspaper(int cx, int cy)
     {
         bool result = TryTakeItem(PickUpType.Newspaper);
         if (!result) LoseBeliefInLocation(PickUpType.Newspaper);
+    }
+
+    private void OnReachStartMakingCoffee(int cx, int cy)
+    {
+        charState.StartJob(JobType.START_MAKING_COFFEE, 1.5f);
+    }
+
+    private void OnReachSitOnCouch(int cx, int cy)
+    {
+        charState.StartJob(JobType.SIT_ON_COUCH, 8f);
+    }
+
+    private void OnReachGetKeysAndWallet(int cx, int cy)
+    {
+        bool result = TryTakeItem(PickUpType.Keys);
+        if (!result) LoseBeliefInLocation(PickUpType.Keys);
+    }
+
+    private void OnReachGetBriefcase(int cx, int cy)
+    {
+        bool result = TryTakeItem(PickUpType.Briefcase);
+        if (!result) LoseBeliefInLocation(PickUpType.Briefcase);
+    }
+
+    private void OnReachGetShoes(int cx, int cy)
+    {
+        bool result = TryTakeItem(PickUpType.Shoes);
+        if (!result) LoseBeliefInLocation(PickUpType.Shoes);
     }
 
     private void OnReachMakeBed(int cx, int cy)
