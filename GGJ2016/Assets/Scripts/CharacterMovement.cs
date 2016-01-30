@@ -78,6 +78,19 @@ public class CharacterMovement : MonoBehaviour
 	    ai.Update();
 	}
 
+    public void FaceDirection(Orientation dir)
+    {
+
+    }
+
+    private void UpdateFacingDirection()
+    {
+        if (nextX > cx) FaceDirection(Orientation.RIGHT);
+        if (nextX < cx) FaceDirection(Orientation.LEFT);
+        if (nextY > cy) FaceDirection(Orientation.DOWN);
+        if (nextY < cy) FaceDirection(Orientation.UP);
+    }
+
     public void SetOnStepAction(Action action)
     {
         onStep = action;
@@ -133,6 +146,7 @@ public class CharacterMovement : MonoBehaviour
         moving = true;
         nextX = next.x;
         nextY = next.y;
+        UpdateFacingDirection();
         moveStartTime = Time.time;
 
         var nextPos = Vector2.zero;
