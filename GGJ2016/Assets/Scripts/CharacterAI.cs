@@ -6,6 +6,9 @@ public class CharacterAI {
     delegate float WeightFunction();
     delegate void UpdateFunction();
 
+    private readonly List<PickUp> heldItems;
+
+    private readonly GameManager gameManager;
     private readonly GameVariables gameVars;
     private readonly GridGraph houseGrid;
     private readonly CharacterState charState;
@@ -17,17 +20,20 @@ public class CharacterAI {
 
     public CharacterAI(GameManager gameManager)
     {
+        this.gameManager = gameManager;
         this.character = gameManager.Character;
         this.gameVars = gameManager.GameVars;
         this.houseGrid = gameManager.HouseGrid;
         this.player = gameManager.Player;
         charState = new CharacterState();
+        heldItems = new List<PickUp>();
 
         weightFunctions = new Dictionary<DecisionType, WeightFunction>
         {
             {DecisionType.MakeBed, WeightMakeBed},
             {DecisionType.GoToilet, WeightGoToilet},        
             {DecisionType.BrushTeeth, WeightBrushTeeth},    
+            {DecisionType.GetToothBrush, WeightFindToothbrush},    
             {DecisionType.LeaveHouse, WeightLeaveHouse},
         };
 
@@ -36,6 +42,7 @@ public class CharacterAI {
             {DecisionType.MakeBed, UpdateMakeBed},
             {DecisionType.GoToilet, UpdateGoToilet},
             {DecisionType.BrushTeeth, UpdateBrushTeeth},
+            {DecisionType.GetToothBrush, UpdateFindToothbrush},    
             {DecisionType.LeaveHouse, UpdateLeaveHouse},
         };
 
@@ -112,13 +119,87 @@ public class CharacterAI {
     private void UpdateSuspicion()
     {
         gameVars.AddSuspicion(-0.001f);
-        var ch = character;
-        if (houseGrid.DirectionalLineOfSight(ch.cx, ch.cy, player.cx, player.cy, ch.currentOrientation))
+        if (CanSee(player.cx, player.cy))
         {
             if (player.IsHoldingItem())
             {
                 gameVars.AddSuspicion(0.04f);
             }
+        }
+    }
+
+    // "GameVariable" functions.
+
+    private bool IsHolding(PickUpType item)
+    {
+        return heldItems.Exists((p) => p.type == item);
+    }
+
+    private bool HasBeliefInLocation(PickUpType item)
+    {
+        return gameManager.pickups[item].hasBeliefInLocation;
+    }
+
+
+    private bool CanSee(PickUpType item)
+    {
+        var pickup = gameManager.pickups[item];
+        bool seen = CanSee(pickup.cx, pickup.cy) ||
+                   CanSee(pickup.cx-1, pickup.cy) ||
+                   CanSee(pickup.cx+1, pickup.cy) ||
+                   CanSee(pickup.cx, pickup.cy-1) ||
+                   CanSee(pickup.cx, pickup.cy+1);
+
+        if (seen) pickup.SetBelievedLocation(pickup.cx, pickup.cy);
+        return seen;
+    }
+
+    private bool CanSee(int x, int y)
+    {
+        var ch = character;
+        return houseGrid.DirectionalLineOfSight(ch.cx, ch.cy, x, y, ch.currentOrientation);
+    }
+
+    private bool TryTakeItem(PickUpType item)
+    {
+        var p = gameManager.pickups[item];
+        var c = character;
+        if (p.cx == c.cx && p.cy == c.cy)
+        {
+            heldItems.Add(p);
+            return true;
+        }
+        if (p.cx == c.cx && p.cy == c.cy + 1)
+        {
+            c.FaceDirection(Orientation.DOWN);
+            heldItems.Add(p);
+            return true;
+        }
+        if (p.cx == c.cx && p.cy == c.cy - 1)
+        {
+            c.FaceDirection(Orientation.UP);
+            heldItems.Add(p);
+            return true;
+        }
+        if (p.cx == c.cx - 1 && p.cy == c.cy)
+        {
+            c.FaceDirection(Orientation.LEFT);
+            heldItems.Add(p);
+            return true;
+        }
+        if (p.cx == c.cx + 1 && p.cy == c.cy)
+            heldItems.Add(p);
+        {
+            c.FaceDirection(Orientation.RIGHT);
+            return true;
+        }
+    }
+
+    private void WalkTowards(int targetX, int targetY)
+    {
+        if (!character.TargetMatches(targetX, targetY))
+        {
+            character.SetOnStepAction(() => charState.SetState(State.STANDING));
         }
     }
 
@@ -130,10 +211,25 @@ public class CharacterAI {
         return 1f;
     }
 
+    private float WeightFindToothbrush()  // NEXT: IMPLEMENT UpdateFindToothBrush -> toothbrush finding logic  ||| and OnReachFindToothBrush() <-- pickup if within +.
+    {
+        if (IsHolding(PickUpType.Toothbrush)) return -100f;
+        if (gameVars.brushedTeeth) return -1f;
+        if (!HasBeliefInLocation(PickUpType.Toothbrush) && !CanSee(PickUpType.Toothbrush))
+        {
+            if (gameVars.findingToothbrushSearchedRoom) return -0.4f;
+            return 0.88f;
+        }
+
+        return 0.9f;
+    }
+
+
     private float WeightBrushTeeth()
     {
         if (gameVars.brushedTeeth) return -1f;
-        return 0.5f;;
+        if (!IsHolding(PickUpType.Toothbrush)) return -100f;
+        return 0.85f;;
     }
 
     private float WeightMakeBed()
@@ -157,10 +253,7 @@ public class CharacterAI {
         switch (charState.state)
         {
             case State.WALKING:
-                if (!character.TargetMatches(targetX, targetY))
-                {
-                    character.SetOnStepAction(() => PathFindTowards(targetX, targetY, targetOrientation, onReach));
-                }
+                WalkTowards(targetX, targetY);
                 break;
             case State.STANDING:
                 PathFindTowards(targetX, targetY, targetOrientation, onReach);
@@ -198,6 +291,36 @@ public class CharacterAI {
         );
     }
 
+    private void UpdateFindToothbrush()
+    {
+        var toothbrush = gameManager.pickups[PickUpType.Toothbrush];
+        switch (charState.state)
+        {
+            case State.WALKING:
+                if (toothbrush.hasBeliefInLocation)
+                {
+                    WalkTowards(toothbrush.believedX, toothbrush.believedY);
+                }
+                else
+                {
+                    WalkTowards(GameVariables.searchRoomX, GameVariables.searchRoomY);
+                }
+                break;
+            case State.STANDING:
+                if (toothbrush.hasBeliefInLocation)
+                {
+                    PathFindTowards(toothbrush.believedX, toothbrush.believedY, Orientation.UP, OnReachFindToothbrush);
+                }
+                else
+                {
+                    PathFindTowards(GameVariables.searchRoomX, GameVariables.searchRoomY, Orientation.UP, OnReachCannotFindToothbrush);
+                }
+                break;
+            case State.DOING_JOB:
+                charState.CancelJob();
+                break;
+        }
+    }
 
     private void UpdateBrushTeeth()
     {
@@ -254,6 +377,16 @@ public class CharacterAI {
     private void OnReachGoToilet(int cx, int cy)
     {
         charState.StartJob(JobType.GO_TOILET, 3f);
+    }
+
+    private void OnReachFindToothbrush(int cx, int cy)
+    {
+        TryTakeItem(PickUpType.Toothbrush);
+    }
+
+    private void OnReachCannotFindToothbrush(int cx, int cy)
+    {
+        gameVars.findingToothbrushSearchedRoom = true;
     }
 
     private void OnReachBrushTeeth(int cx, int cy)

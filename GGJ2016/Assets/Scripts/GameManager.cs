@@ -74,8 +74,8 @@ public class GameManager : MonoBehaviour
 	float realMinX, realMinY, realMaxX, realMaxY;
 	// Use this for initialization
 
-    public List<Interactable> interactables = new List<Interactable>();
-	public List<PickUp> pickups = new List<PickUp>();
+    public Dictionary<InteractableType, Interactable> interactables = new Dictionary<InteractableType, Interactable>();
+    public Dictionary<PickUpType, PickUp> pickups = new Dictionary<PickUpType, PickUp>();
 
 
     private void Start()
@@ -132,10 +132,18 @@ public class GameManager : MonoBehaviour
 
 
         //initialise interactables
-        interactables.Add(new Interactable(0, 8, InteractMakeBed));
+        InitialiseInteractables();
 
         //initialise pickupables
         InitialisePickupables();
+    }
+
+    private void InitialiseInteractables()
+    {
+        interactables = new Interactable[]
+        {
+            new Interactable(0, 8, InteractableType.BED, InteractMakeBed),
+        }.ToDictionary(i => i.type);
     }
 
     private void InitialisePickupables()
@@ -153,7 +161,7 @@ public class GameManager : MonoBehaviour
             new PickUp(PickUpType.Wallet, 8, 0, prefab_pickup),
             new PickUp(PickUpType.Briefcase, 9, 0, prefab_pickup),
             new PickUp(PickUpType.Shoes, 10, 0, prefab_pickup),
-        }.ToList();
+        }.ToDictionary(p => p.type);
     }
 
     private void OnDrawGizmos()

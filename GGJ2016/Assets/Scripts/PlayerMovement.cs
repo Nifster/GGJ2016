@@ -10,8 +10,8 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField]
 	GameObject gameManager;
 	GridGraph houseGrid;
-	List<Interactable> interactables;
-	List<PickUp> pickups;
+	Dictionary<InteractableType, Interactable> interactables;
+	Dictionary<PickUpType, PickUp> pickups;
     private PickUp currentlyHeldPickUp;
 
     public Orientation orientation { get; private set; }
@@ -164,7 +164,7 @@ public class PlayerMovement : MonoBehaviour {
         int dx = ToMovementX(orientation);
         int dy = ToMovementY(orientation);
 
-	    return interactables.FirstOrDefault(interactable => interactable.gx == gx + dx && interactable.gy == gy + dy);
+	    return interactables.Values.FirstOrDefault(interactable => interactable.gx == gx + dx && interactable.gy == gy + dy);
 	}
 
 	PickUp FindPickUpInFront()
@@ -174,7 +174,7 @@ public class PlayerMovement : MonoBehaviour {
         int dx = ToMovementX(orientation);
         int dy = ToMovementY(orientation);
 
-        return pickups.FirstOrDefault(pickup => pickup.cx == gx + dx && pickup.cy == gy + dy);
+        return pickups.Values.FirstOrDefault(pickup => pickup.cx == gx + dx && pickup.cy == gy + dy);
 	}
 
     public bool IsHoldingItem()

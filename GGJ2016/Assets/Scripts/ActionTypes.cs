@@ -5,6 +5,7 @@ public enum DecisionType {
     // The regular sequence of events.
     None,
     GoToilet,
+    GetToothBrush,
     BrushTeeth,
     GetMilk,
     PutMilkOnDiningTable,
