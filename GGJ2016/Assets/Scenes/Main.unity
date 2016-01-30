@@ -9934,6 +9934,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab_pickup: {fileID: 180142, guid: 61fe23a075219a143ba3044ddf63a422, type: 2}
+  playerObject: {fileID: 562304385}
+  characterObject: {fileID: 1615262352}
   realMinX: -5
   realMinY: -5
   realMaxX: 5
