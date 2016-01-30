@@ -7,16 +7,20 @@ public class CharacterAI {
     delegate void UpdateFunction();
 
     private readonly GameVariables gameVars;
+    private readonly GridGraph houseGrid;
     private readonly CharacterState charState;
     private readonly Dictionary<DecisionType, WeightFunction> weightFunctions;
     private readonly Dictionary<DecisionType, UpdateFunction> updateFunctions;
-    private readonly CharacterMovement characterMovement;
+    private readonly CharacterMovement character;
+    private readonly PlayerMovement player;
 
 
-    public CharacterAI(CharacterMovement characterMovement, GameVariables gameVars)
+    public CharacterAI(GameManager gameManager)
     {
-        this.characterMovement = characterMovement;
-        this.gameVars = gameVars;
+        this.character = gameManager.Character;
+        this.gameVars = gameManager.GameVars;
+        this.houseGrid = gameManager.HouseGrid;
+        this.player = gameManager.Player;
         charState = new CharacterState();
 
         weightFunctions = new Dictionary<DecisionType, WeightFunction>
@@ -83,6 +87,8 @@ public class CharacterAI {
         {
             updateFunctions[decision]();
         }
+
+        UpdateSuspicion();
     }
 
     public void OnObstructed(int cx, int cy, int nextX, int nextY)
@@ -92,7 +98,7 @@ public class CharacterAI {
 
     private void PathFindTowards(int tx, int ty, Orientation targetOrientation, CharacterMovement.OnReachDestinationFunction onReach)
     {
-        bool canFindPath = characterMovement.PathFindTowards(tx, ty, targetOrientation, onReach);
+        bool canFindPath = character.PathFindTowards(tx, ty, targetOrientation, onReach);
         if (canFindPath)
         {
             charState.SetState(State.WALKING);
@@ -100,6 +106,16 @@ public class CharacterAI {
         else
         {
             charState.SetState(State.STANDING);
+        }
+    }
+
+    private void UpdateSuspicion()
+    {
+        gameVars.AddSuspicion(-0.001f);
+        var ch = character;
+        if (houseGrid.DirectionalLineOfSight(ch.cx, ch.cy, player.cx, player.cy, ch.currentOrientation))
+        {
+            gameVars.AddSuspicion(0.01f);
         }
     }
 
@@ -138,9 +154,9 @@ public class CharacterAI {
         switch (charState.state)
         {
             case State.WALKING:
-                if (!characterMovement.TargetMatches(targetX, targetY))
+                if (!character.TargetMatches(targetX, targetY))
                 {
-                    characterMovement.SetOnStepAction(() => PathFindTowards(targetX, targetY, targetOrientation, onReach));
+                    character.SetOnStepAction(() => PathFindTowards(targetX, targetY, targetOrientation, onReach));
                 }
                 break;
             case State.STANDING:

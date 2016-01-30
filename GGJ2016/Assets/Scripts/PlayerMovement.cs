@@ -14,9 +14,11 @@ public class PlayerMovement : MonoBehaviour {
 	List<PickUp> pickups;
     private PickUp currentlyHeldPickUp;
 
-    private Orientation orientation;
+    public Orientation orientation { get; private set; }
+    public int cx { get; private set; }
+    public int cy { get; private set; }
 
-	[SerializeField]
+    [SerializeField]
 	float movementCooldown;
 	float cooldownTimer;
 
@@ -26,6 +28,16 @@ public class PlayerMovement : MonoBehaviour {
 		houseGrid = gameManager.GetComponent<GameManager>().HouseGrid;
         interactables = gameManager.GetComponent<GameManager>().interactables;
         pickups = gameManager.GetComponent<GameManager>().pickups;
+
+
+        // Snap to nearest grid position.
+        int x, y;
+        houseGrid.ToGridCoordinates(transform.position.x, transform.position.y, out x, out y);
+        cx = x;
+        cy = y;
+        Vector2 newPosition = Vector2.zero;
+        houseGrid.ToRealCoordinates(cx, cy, out newPosition.x, out newPosition.y);
+        transform.position = newPosition;
 	}
 
 	// Update is called once per frame
@@ -132,9 +144,14 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
 		if (dx != 0 || dy != 0) {
-			if(!houseGrid.IsBlockedActual(this.transform.position.x,this.transform.position.y, dx:dx, dy:dy)) {
-				
-				this.transform.position = new Vector2(this.transform.position.x+dx,this.transform.position.y+dy);
+			if(!houseGrid.IsBlocked(cx+dx,cy+dy))
+			{
+			    cx += dx;
+			    cy += dy;
+			    var newPosition = Vector2.zero;
+			    houseGrid.ToRealCoordinates(cx, cy, out newPosition.x, out newPosition.y);
+			    this.transform.position = newPosition;
+
 				cooldownTimer = movementCooldown;
 			}
 		}

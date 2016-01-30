@@ -8,6 +8,21 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject prefab_pickup;
 
+    [SerializeField]
+    GameObject playerObject;
+    private PlayerMovement player;
+
+    [SerializeField]
+    GameObject characterObject;
+    private CharacterMovement character;
+
+
+
+    private Texture2D meterBack;
+    private Rect rectBack;
+    private Texture2D meterFront;
+    private Rect rectFront;
+
     public static GameManager Instance { get; private set; }
     private void Awake()
     {
@@ -37,6 +52,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public PlayerMovement Player
+    {
+        get
+        {
+            Initialise();
+            return player;
+        }
+    }
+
+    public CharacterMovement Character
+    {
+        get
+        {
+            Initialise();
+            return character;
+        }
+    }
+
     [SerializeField]
 	float realMinX, realMinY, realMaxX, realMaxY;
 	// Use this for initialization
@@ -56,6 +89,13 @@ public class GameManager : MonoBehaviour
         if (houseGrid != null) return;
         houseGrid = new GridGraph();
         gameVars = new GameVariables();
+        character = characterObject.GetComponent<CharacterMovement>();
+        player = playerObject.GetComponent<PlayerMovement>();
+
+        meterBack = new Texture2D(1, 1);
+        meterBack.SetPixel(0, 0, Color.gray);
+        meterFront = new Texture2D(1, 1);
+        meterFront.SetPixel(0, 0, Color.yellow);
 
         //initialize empty room
         bool[,] isBlocked = new bool[10, 10];
@@ -163,6 +203,24 @@ public class GameManager : MonoBehaviour
     private void OnGUI()
     {
         GUI.Label(new Rect(0, 0, 100, 100), debugStatusText);
+
+        float meterWidth = 140;
+        float meterHeight = 30;
+
+        rectBack.xMin = Screen.width / 2 - meterWidth / 2;
+        rectBack.width = meterWidth;
+        rectBack.yMin = 10;
+        rectBack.height = meterHeight;
+
+        rectFront.xMin = Screen.width / 2 - meterWidth / 2;
+        rectFront.width = meterWidth * gameVars.suspicionLevel;
+        rectFront.yMin = 10;
+        rectFront.height = meterHeight;
+
+        GUI.color = Color.gray;
+        GUI.DrawTexture(rectBack, meterBack);
+        GUI.color = Color.yellow;
+        GUI.DrawTexture(rectFront, meterFront);
     }
 
     // Update is called once per frame

@@ -53,4 +53,12 @@ public class GameVariables
     public const int exitY = 0;
 
 
+
+
+    // Functions
+    public void AddSuspicion(float val)
+    {
+        suspicionLevel += val;
+        suspicionLevel = Mathf.Clamp(suspicionLevel, 0, 1);
+    }
 }
