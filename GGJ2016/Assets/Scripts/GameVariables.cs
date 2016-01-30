@@ -3,6 +3,8 @@ using System;
 
 public class GameVariables
 {
+    public float suspicionLevel = 0; // between 0 and 1.
+
 
     public bool brushedTeeth = false;
     public bool usedToilet = false;
