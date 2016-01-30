@@ -29,6 +29,7 @@ public class PickUp {
     public PickUpType type { get; private set; }
     public int cx { get; private set; }
     public int cy { get; private set; }
+    public bool active { get; private set; }
 
     public int believedX { get; private set; }
     public int believedY { get; private set; }
@@ -37,7 +38,7 @@ public class PickUp {
     public PickUpStatus status { get; private set; }
     private readonly GridGraph houseGrid = GameManager.Instance.HouseGrid;
 
-    public PickUp(PickUpType type, int cx, int cy, GameObject prefab_pickup)
+    public PickUp(PickUpType type, int cx, int cy, GameObject prefab_pickup, bool active=true)
     {
         this.cx = cx;
         this.cy = cy;
@@ -45,10 +46,26 @@ public class PickUp {
         believedY = cy;
         hasBeliefInLocation = true;
 
+
         this.type = type;
         var go = MonoBehaviour.Instantiate(prefab_pickup) as GameObject;
         transform = go.transform;
         RefreshPosition();
+
+        this.active = active;
+        transform.GetComponent<SpriteRenderer>().enabled = active;
+    }
+
+    public void Activate()
+    {
+        active = true;
+        transform.GetComponent<SpriteRenderer>().enabled = true;
+    }
+
+    public void Deactivate()
+    {
+        active = false;
+        transform.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     private void RefreshPosition()
@@ -68,6 +85,7 @@ public class PickUp {
         this.cx = cx;
         this.cy = cy;
         this.status = PickUpStatus.Unheld;
+        Debug.Log(cx + ", " + cy + ", " + status);
         transform.parent = null;
         RefreshPosition();
     }
@@ -90,7 +108,7 @@ public class PickUp {
 
     public bool CanTake()
     {
-        return this.status == PickUpStatus.Unheld;
+        return active && (this.status == PickUpStatus.Unheld);
     }
 
     public void SetBelievedLocation(int x, int y)

@@ -16,10 +16,12 @@ public class GameVariables
     public bool isMilkOnDiningTable = false;
     public bool thinksMilkOnDiningTable = false;
 
-    public bool madeCerealOnTable = false;
+    public bool milkIsMissing = false;
+
     public bool ateCereal = false;
 
     public bool isCoffeeBeingMade = false;
+    public bool pastCoffeeDoneTime = false;
     public bool thinksCoffeeBeingMAde = false;
     public bool changedClothes = false;
 
@@ -29,10 +31,13 @@ public class GameVariables
     public bool wornShoes = false;
     public bool leftHouse = false;
 
+    public bool isLate = false;
+    public bool isLateAndAwareOfIt = false;
+
 
     // Constants
-    public const int toiletBowlX = 6;
-    public const int toiletBowlY = 6;
+    public const int toiletBowlX = 7;
+    public const int toiletBowlY = 7;
 
     public const int toiletSinkX = 4;
     public const int toiletSinkY = 8;
@@ -46,6 +51,12 @@ public class GameVariables
 
     public const int searchRoomX = 3;
     public const int searchRoomY = 15;
+
+    public const int diningTableX = 19;
+    public const int diningTableY = 13;
+
+    public const int diSningTableNextToX = 19;
+    public const int diningTableNextToY = 14;
 
 
 
