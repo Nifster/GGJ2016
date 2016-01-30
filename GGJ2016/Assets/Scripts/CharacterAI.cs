@@ -205,6 +205,22 @@ public class CharacterAI {
         return false;
     }
 
+    private void DropItem(PickUpType item)
+    {
+        var pickup = gameManager.pickups[item];
+        if (pickup.status == PickUpStatus.CharacterHeld)
+        {
+            heldItems.RemoveAll(p => p.type == item);
+            pickup.Release(character.cx, character.cy);
+            pickup.UpdateBelievedLocation();
+        }
+    }
+
+    private void PutDownItem(PickUpType item)
+    {
+
+    }
+
     private void WalkTowards(int targetX, int targetY, bool relaxed = false)
     {
         if (relaxed)
@@ -249,18 +265,32 @@ public class CharacterAI {
     {
         if (gameVars.brushedTeeth) return -1f;
         if (!IsHolding(PickUpType.Toothbrush)) return -100f;
-        return 0.85f;;
+        return 0.85f; ;
+    }
+
+
+    private float WeightGetMilk()
+    {
+        if (IsHolding(PickUpType.Milk)) return -100f;
+        if (gameVars.brushedTeeth) return -1f;
+        if (!HasBeliefInLocation(PickUpType.Toothbrush) && !CanSee(PickUpType.Toothbrush))
+        {
+            if (gameVars.findingToothbrushSearchedRoom) return -0.4f;
+            return 0.88f;
+        }
+        return 0.82f;
     }
 
     private float WeightMakeBed()
     {
         if (gameVars.madeBed) return -1f;
-        return 0.5f;
+        if (gameVars.findingToothbrushSearchedRoom) return 0.3f;
+        return 0.1f;
     }
 
     private float WeightLeaveHouse()
     {
-        return 0;
+        return 0.2f;
     }
 
     #endregion
@@ -351,6 +381,7 @@ public class CharacterAI {
             (gameVars) =>
             {
                 gameVars.brushedTeeth = true;
+                DropItem(PickUpType.Toothbrush);
             }
         );
     }

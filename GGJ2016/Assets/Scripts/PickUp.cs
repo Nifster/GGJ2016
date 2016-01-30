@@ -100,6 +100,13 @@ public class PickUp {
         hasBeliefInLocation = true;
     }
 
+    public void UpdateBelievedLocation()
+    {
+        believedX = cx;
+        believedY = cy;
+        hasBeliefInLocation = true;
+    }
+
     public void LoseBeliefInLocation()
     {
         hasBeliefInLocation = false;
