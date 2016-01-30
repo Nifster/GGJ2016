@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
 		var testBool = new int[23,20] {
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 			{1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1},
-			{1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1},
+			{1,1,1,1,1,1,0,1,0,1,1,1,1,0,0,0,0,1,1,1},
 			{1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1},
 			{1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,1},
 			{1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,1},
@@ -120,9 +120,9 @@ public class GameManager : MonoBehaviour
 			{1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1},
 			{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
 			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
+			{0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1},
 			{0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1},
-			{1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
+			{1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1},
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 
 		};
@@ -154,17 +154,17 @@ public class GameManager : MonoBehaviour
     {
         pickups = new PickUp[]
         {
-            new PickUp(PickUpType.Toothbrush, 0, 0, prefab_pickup),
-            new PickUp(PickUpType.Milk, 1, 0, prefab_pickup),
-            new PickUp(PickUpType.Cereal, 2, 0, prefab_pickup),
-            new PickUp(PickUpType.Bowl, 3, 0, prefab_pickup),
-            new PickUp(PickUpType.Coffee, 4, 0, prefab_pickup),
-            new PickUp(PickUpType.Clothes, 5, 0, prefab_pickup),
-            new PickUp(PickUpType.Newspaper, 6, 0, prefab_pickup),
-            new PickUp(PickUpType.Keys, 7, 0, prefab_pickup),
-            new PickUp(PickUpType.Wallet, 8, 0, prefab_pickup),
-            new PickUp(PickUpType.Briefcase, 9, 0, prefab_pickup),
-            new PickUp(PickUpType.Shoes, 10, 0, prefab_pickup),
+            new PickUp(PickUpType.Toothbrush, 2, 7, prefab_pickup),
+            new PickUp(PickUpType.Milk, 9, 6, prefab_pickup),
+            new PickUp(PickUpType.Cereal, 9, 3, prefab_pickup),
+            new PickUp(PickUpType.Bowl, 16, 6, prefab_pickup),
+            new PickUp(PickUpType.Coffee, 13, 6, prefab_pickup),
+            new PickUp(PickUpType.Clothes, 4, 17, prefab_pickup),
+            new PickUp(PickUpType.Newspaper, 19, 2, prefab_pickup),
+            new PickUp(PickUpType.Keys, 15, 3, prefab_pickup),
+            new PickUp(PickUpType.Wallet, 14, 3, prefab_pickup),
+            new PickUp(PickUpType.Briefcase, 13, 3, prefab_pickup),
+            new PickUp(PickUpType.Shoes, 21, 3, prefab_pickup),
         }.ToList();
 
     }
