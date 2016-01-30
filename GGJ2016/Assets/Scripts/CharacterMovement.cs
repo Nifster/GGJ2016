@@ -140,9 +140,16 @@ public class CharacterMovement : MonoBehaviour
         onStep = action;
     }
 
-    public bool PathFindTowards(int tx, int ty, Orientation targetOrientation, OnReachDestinationFunction onReach)
+    public bool PathFindTowards(int tx, int ty, Orientation targetOrientation, OnReachDestinationFunction onReach, bool tryHarder = false)
     {
-        var path = houseGrid.PathFind(cx, cy, tx, ty, ignoreObstructions:false);
+        var path = houseGrid.PathFind(cx, cy, tx, ty, ignoreObstructions:true);
+        if (tryHarder)
+        {
+            if (path == null) path = houseGrid.PathFind(cx, cy, tx, ty - 1, ignoreObstructions: true);
+            if (path == null) path = houseGrid.PathFind(cx, cy, tx, ty + 1, ignoreObstructions: true);
+            if (path == null) path = houseGrid.PathFind(cx, cy, tx - 1, ty, ignoreObstructions: true);
+            if (path == null) path = houseGrid.PathFind(cx, cy, tx + 1, ty, ignoreObstructions: true);
+        }
         if (path == null)
         {
             return false;

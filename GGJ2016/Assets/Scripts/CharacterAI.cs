@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class CharacterAI {
     delegate float WeightFunction();
@@ -103,9 +104,9 @@ public class CharacterAI {
         charState.SetState(State.STANDING);
     }
 
-    private void PathFindTowards(int tx, int ty, Orientation targetOrientation, CharacterMovement.OnReachDestinationFunction onReach)
+    private void PathFindTowards(int tx, int ty, Orientation targetOrientation, CharacterMovement.OnReachDestinationFunction onReach, bool tryHarder = false)
     {
-        bool canFindPath = character.PathFindTowards(tx, ty, targetOrientation, onReach);
+        bool canFindPath = character.PathFindTowards(tx, ty, targetOrientation, onReach, tryHarder);
         if (canFindPath)
         {
             charState.SetState(State.WALKING);
@@ -195,11 +196,21 @@ public class CharacterAI {
         }
     }
 
-    private void WalkTowards(int targetX, int targetY)
+    private void WalkTowards(int targetX, int targetY, bool relaxed = false)
     {
-        if (!character.TargetMatches(targetX, targetY))
+        if (relaxed)
         {
-            character.SetOnStepAction(() => charState.SetState(State.STANDING));
+            if (Math.Abs(character.cx - targetX) + Math.Abs(character.cy - targetY) > 1)
+            {
+                character.SetOnStepAction(() => charState.SetState(State.STANDING));
+            }
+        }
+        else
+        {
+            if (!character.TargetMatches(targetX, targetY))
+            {
+                character.SetOnStepAction(() => charState.SetState(State.STANDING));
+            }
         }
     }
 
@@ -276,6 +287,22 @@ public class CharacterAI {
         }
     }
 
+    private void GrabItemUpdateFunction(int targetX, int targetY, CharacterMovement.OnReachDestinationFunction onReach)
+    {
+        switch (charState.state)
+        {
+            case State.WALKING:
+                WalkTowards(targetX, targetY, true);
+                break;
+            case State.STANDING:
+                PathFindTowards(targetX, targetY, Orientation.UP, onReach, true);
+                break;
+            case State.DOING_JOB:
+                charState.CancelJob();
+                break;
+        }
+    }
+
     private void UpdateGoToilet()
     {
         DefaultUpdateFunction(
@@ -294,31 +321,13 @@ public class CharacterAI {
     private void UpdateFindToothbrush()
     {
         var toothbrush = gameManager.pickups[PickUpType.Toothbrush];
-        switch (charState.state)
+        if (toothbrush.hasBeliefInLocation)
         {
-            case State.WALKING:
-                if (toothbrush.hasBeliefInLocation)
-                {
-                    WalkTowards(toothbrush.believedX, toothbrush.believedY);
-                }
-                else
-                {
-                    WalkTowards(GameVariables.searchRoomX, GameVariables.searchRoomY);
-                }
-                break;
-            case State.STANDING:
-                if (toothbrush.hasBeliefInLocation)
-                {
-                    PathFindTowards(toothbrush.believedX, toothbrush.believedY, Orientation.UP, OnReachFindToothbrush);
-                }
-                else
-                {
-                    PathFindTowards(GameVariables.searchRoomX, GameVariables.searchRoomY, Orientation.UP, OnReachCannotFindToothbrush);
-                }
-                break;
-            case State.DOING_JOB:
-                charState.CancelJob();
-                break;
+            GrabItemUpdateFunction(toothbrush.believedX, toothbrush.believedY, OnReachFindToothbrush);
+        }
+        else
+        {
+            GrabItemUpdateFunction(GameVariables.searchRoomX, GameVariables.searchRoomY, OnReachCannotFindToothbrush);
         }
     }
 
