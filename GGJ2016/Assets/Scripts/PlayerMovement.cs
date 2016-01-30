@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour {
 	[SerializeField]
 	float movementCooldown;
 	float cooldownTimer;
+
+	public List<Sprite> sprites = new List<Sprite>();
 	// Use this for initialization
 	void Start () {
 		houseGrid = gameManager.GetComponent<GameManager>().houseGrid;
@@ -29,16 +31,16 @@ public class PlayerMovement : MonoBehaviour {
 		houseGrid.ToGridCoordinates(this.transform.position.x-1,this.transform.position.y-1,out gx,out gy);
 		//Debug.Log("GX: "+gx);
 		//Debug.Log("GY: "+gy);
-		if(interactableHash.ContainsKey(new Point{x=gx+1,y=gy})){
+		if(interactableHash.ContainsKey(new Point{x=gx+1,y=gy}) && this.GetComponent<SpriteRenderer>().sprite == sprites[0]){
 			Debug.Log("Interactable found GX:" + gx +" GY: " +gy);
 		}
-		if(interactableHash.ContainsKey(new Point{x=gx-1,y=gy})){
+		if(interactableHash.ContainsKey(new Point{x=gx,y=gy+1}) && this.GetComponent<SpriteRenderer>().sprite == sprites[1]){
 			Debug.Log("Interactable found GX:" + gx +" GY: " +gy);
 		}
-		if(interactableHash.ContainsKey(new Point{x=gx,y=gy+1})){
+		if(interactableHash.ContainsKey(new Point{x=gx-1,y=gy}) && this.GetComponent<SpriteRenderer>().sprite == sprites[2]){
 			Debug.Log("Interactable found GX:" + gx +" GY: " +gy);
 		}
-		if(interactableHash.ContainsKey(new Point{x=gx,y=gy-1})){
+		if(interactableHash.ContainsKey(new Point{x=gx,y=gy-1}) && this.GetComponent<SpriteRenderer>().sprite == sprites[3]){
 			Debug.Log("Interactable found GX:" + gx +" GY: " +gy);
 		}
 
@@ -76,21 +78,25 @@ public class PlayerMovement : MonoBehaviour {
 				var dir = Orientation.RIGHT;
 				dx += ToMovementX(dir);
 				dy += ToMovementY(dir);
+				this.GetComponent<SpriteRenderer>().sprite = sprites[0];
 			}
 			if(Input.GetKey(moveUp)) {
 				var dir = Orientation.UP;
 				dx += ToMovementX(dir);
 				dy += ToMovementY(dir);
+				this.GetComponent<SpriteRenderer>().sprite = sprites[1];
 			}
 			if(Input.GetKey(moveLeft)) {
 				var dir = Orientation.LEFT;
 				dx += ToMovementX(dir);
 				dy += ToMovementY(dir);
+				this.GetComponent<SpriteRenderer>().sprite = sprites[2];
 			}
 			if(Input.GetKey(moveDown)) {
 				var dir = Orientation.DOWN;
 				dx += ToMovementX(dir);
 				dy += ToMovementY(dir);
+				this.GetComponent<SpriteRenderer>().sprite = sprites[3];
 			}
 		}
 
