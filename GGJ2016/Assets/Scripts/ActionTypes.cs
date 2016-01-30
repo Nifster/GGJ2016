@@ -18,6 +18,7 @@ public enum State {
 
 public enum JobType
 {
+    NONE,
     GO_TOILET,
     BRUSH_TEETH,
     MAKE_BED,

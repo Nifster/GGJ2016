@@ -10,4 +10,9 @@ public class GameVariables
     public bool madeBed = false;
 
 
+
+    // Constants
+    public const int toiletX = 5;
+    public const int toiletY = 2;
+
 }

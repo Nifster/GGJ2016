@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 	float cooldownTimer;
 	// Use this for initialization
 	void Start () {
-		houseGrid = gameManager.GetComponent<GameManager>().houseGrid;
+		houseGrid = gameManager.GetComponent<GameManager>().HouseGrid;
 		interactableHash = gameManager.GetComponent<GameManager>().interactableHash;
 	}
 
