@@ -90,9 +90,9 @@ public class CharacterAI {
         charState.SetState(State.STANDING);
     }
 
-    private void PathFindTowards(int tx, int ty, CharacterMovement.OnReachDestinationFunction onReach)
+    private void PathFindTowards(int tx, int ty, Orientation targetOrientation, CharacterMovement.OnReachDestinationFunction onReach)
     {
-        bool canFindPath = characterMovement.PathFindTowards(tx, ty, onReach);
+        bool canFindPath = characterMovement.PathFindTowards(tx, ty, targetOrientation, onReach);
         if (canFindPath)
         {
             charState.SetState(State.WALKING);
@@ -133,18 +133,18 @@ public class CharacterAI {
 
 #region Update Functions
 
-    private void DefaultUpdateFunction(int targetX, int targetY, CharacterMovement.OnReachDestinationFunction onReach, JobType jobType, Action<GameVariables> gameVariableChanges)
+    private void DefaultUpdateFunction(int targetX, int targetY, Orientation targetOrientation, CharacterMovement.OnReachDestinationFunction onReach, JobType jobType, Action<GameVariables> gameVariableChanges)
     {
         switch (charState.state)
         {
             case State.WALKING:
                 if (!characterMovement.TargetMatches(targetX, targetY))
                 {
-                    characterMovement.SetOnStepAction(() => PathFindTowards(targetX, targetY, onReach));
+                    characterMovement.SetOnStepAction(() => PathFindTowards(targetX, targetY, targetOrientation, onReach));
                 }
                 break;
             case State.STANDING:
-                PathFindTowards(targetX, targetY, onReach);
+                PathFindTowards(targetX, targetY, targetOrientation, onReach);
                 break;
             case State.DOING_JOB:
                 if (charState.currentJobType == jobType)
@@ -169,6 +169,7 @@ public class CharacterAI {
         DefaultUpdateFunction(
             GameVariables.toiletBowlX, 
             GameVariables.toiletBowlY,
+            Orientation.UP, 
             OnReachGoToilet,
             JobType.GO_TOILET,
             (gameVars) =>
@@ -184,6 +185,7 @@ public class CharacterAI {
         DefaultUpdateFunction(
             GameVariables.toiletSinkX,
             GameVariables.toiletSinkY,
+            Orientation.UP, 
             OnReachBrushTeeth,
             JobType.BRUSH_TEETH,
             (gameVars) =>
@@ -198,6 +200,7 @@ public class CharacterAI {
         DefaultUpdateFunction(
             GameVariables.bedSideX,
             GameVariables.bedSideY,
+            Orientation.LEFT, 
             OnReachMakeBed,
             JobType.MAKE_BED,
             (gameVars) =>
@@ -213,6 +216,7 @@ public class CharacterAI {
         DefaultUpdateFunction(
             GameVariables.exitX,
             GameVariables.exitY,
+            Orientation.DOWN, 
             OnReachLeaveHouse,
             JobType.LEAVE_HOUSE,
             (gameVars) =>
