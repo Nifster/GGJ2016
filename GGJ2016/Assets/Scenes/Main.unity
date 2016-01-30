@@ -9933,6 +9933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dae3647cfab7f1e439cda547dad3d673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab_pickup: {fileID: 180142, guid: 61fe23a075219a143ba3044ddf63a422, type: 2}
   realMinX: -5
   realMinY: -5
   realMaxX: 5
