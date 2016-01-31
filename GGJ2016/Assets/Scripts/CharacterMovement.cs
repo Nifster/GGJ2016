@@ -12,7 +12,7 @@ public class CharacterMovement : MonoBehaviour
 
     GridGraph houseGrid;
 
-    private CharacterAI ai;
+    public CharacterAI ai { get; private set; }
 
     private Queue<Point> pathQueue;
     private int targetX; // set together with pathQueue

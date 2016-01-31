@@ -199,7 +199,7 @@ public class CharacterAI {
 
     // "GameVariable" functions.
 
-    private bool IsHolding(PickUpType item)
+    public bool IsHolding(PickUpType item)
     {
         return heldItems.Exists((p) => p.type == item);
     }

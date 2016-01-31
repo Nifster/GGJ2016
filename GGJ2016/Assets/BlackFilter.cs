@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BlackFilter : MonoBehaviour
@@ -72,8 +73,24 @@ public class BlackFilter : MonoBehaviour
         }
         else
         {
+            var vars = GameManager.Instance.GameVars;
+            var ai = GameManager.Instance.Character.ai;
+            
+            var scores = new List<string>();
+
+            textObject.SmallFont();
+
+            if (vars.minutesPassed >= 60) scores.Add("Left the house past 8!");
+            if (!ai.IsHolding(PickUpType.Briefcase)) scores.Add("Left house without Briefcase!");
+            if (!ai.IsHolding(PickUpType.KeysWallet)) scores.Add("Left house without Key & Wallet!");
+            if (!ai.IsHolding(PickUpType.Shoes)) scores.Add("Left house without Shoes!");
+            if (!vars.changedClothes) scores.Add("Left house in pyjamas!");
+
+
+
+
             spriteRenderer.sprite = spriteBlack;
-            textObject.UpdateString("END OF\nDAY " + Global.dayCount);
+            textObject.UpdateString("END OF DAY " + Global.dayCount + "\nACHIEVEMENTS:\n\n" + string.Join("\n", scores.ToArray()));
         }
 
         StartAnimation();
@@ -187,23 +204,19 @@ public class BlackFilter : MonoBehaviour
             alpha = 1f;
             UpdateAlpha();
         }
-        else if (t < 3.5f)
+        else if (t < 4f)
         {
             textObject.Show();
         }
-        else if (t < 4f)
-        {
-            textObject.Hide();
-        }
-        else
+        else if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Return))
         {
             alpha = 1f;
             UpdateAlpha();
             textObject.Hide();
             Time.timeScale = 1;
             Global.RestartGame();
-        }
 
+        }
     }
 
     void UpdateAlpha()

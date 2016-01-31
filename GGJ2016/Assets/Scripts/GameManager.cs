@@ -319,12 +319,12 @@ public class GameManager : MonoBehaviour
 
     private void InitialiseObjective()
     {
-        SetObjective("Get Pierce to make the bed!");
+        SetObjective("Make Pierce late for work!");
     }
 
     public void SetObjective(string objective)
     {
-        objectiveText.UpdateString("Goal\n" + objective);
+        objectiveText.UpdateString("Goal:\n" + objective);
     }
 
 

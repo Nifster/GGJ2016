@@ -88,4 +88,9 @@ public class TextObject : MonoBehaviour {
     protected virtual void TextChanged()
     {
     }
+
+    public void SmallFont()
+    {
+        TextMesh.fontSize = 40;
+    }
 }
