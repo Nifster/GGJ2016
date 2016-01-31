@@ -207,7 +207,7 @@ public class CharacterAI {
                    CanSee(pickup.cx, pickup.cy-1) ||
                    CanSee(pickup.cx, pickup.cy+1);
 
-        if (seen) pickup.SetBelievedLocation(pickup.cx, pickup.cy);
+        if (seen) pickup.UpdateBelievedLocation();
         return seen;
     }
 
@@ -221,37 +221,36 @@ public class CharacterAI {
     {
         var p = gameManager.pickups[item];
         var c = character;
-        if (p.CanTake())
+        if (!p.CanTake()) return false;
+
+        if (p.cx == c.cx && p.cy == c.cy)
         {
-            if (p.cx == c.cx && p.cy == c.cy)
-            {
-                heldItems.Add(p.CharacterTake(c.transform));
-                return true;
-            }
-            if (p.cx == c.cx && p.cy == c.cy + 1)
-            {
-                c.FaceDirection(Orientation.DOWN);
-                heldItems.Add(p.CharacterTake(c.transform));
-                return true;
-            }
-            if (p.cx == c.cx && p.cy == c.cy - 1)
-            {
-                c.FaceDirection(Orientation.UP);
-                heldItems.Add(p.CharacterTake(c.transform));
-                return true;
-            }
-            if (p.cx == c.cx - 1 && p.cy == c.cy)
-            {
-                c.FaceDirection(Orientation.LEFT);
-                heldItems.Add(p.CharacterTake(c.transform));
-                return true;
-            }
-            if (p.cx == c.cx + 1 && p.cy == c.cy)
-            {
-                c.FaceDirection(Orientation.RIGHT);
-                heldItems.Add(p.CharacterTake(c.transform));
-                return true;
-            }
+            heldItems.Add(p.CharacterTake(c));
+            return true;
+        }
+        if (p.cx == c.cx && p.cy == c.cy + 1)
+        {
+            c.FaceDirection(Orientation.DOWN);
+            heldItems.Add(p.CharacterTake(c));
+            return true;
+        }
+        if (p.cx == c.cx && p.cy == c.cy - 1)
+        {
+            c.FaceDirection(Orientation.UP);
+            heldItems.Add(p.CharacterTake(c));
+            return true;
+        }
+        if (p.cx == c.cx - 1 && p.cy == c.cy)
+        {
+            c.FaceDirection(Orientation.LEFT);
+            heldItems.Add(p.CharacterTake(c));
+            return true;
+        }
+        if (p.cx == c.cx + 1 && p.cy == c.cy)
+        {
+            c.FaceDirection(Orientation.RIGHT);
+            heldItems.Add(p.CharacterTake(c));
+            return true;
         }
         return false;
     }
@@ -510,7 +509,7 @@ public class CharacterAI {
     {
         float value = 0.1f;
         if (gameVars.madeBed) return -100f;
-        if (gameVars.findingToothbrushSearchedRoom) value += 0.3f;
+        if (gameVars.findingToothbrushSearchedRoom) value += 0.75f;
         if (gameVars.isLate) value -= 0.5f;
         return value;
     }
@@ -777,6 +776,7 @@ public class CharacterAI {
             JobType.MAKE_BED,
             (gameVars) =>
             {
+                gameManager.SetBedMadeSprite();
                 gameVars.madeBed = true;
             }
         );

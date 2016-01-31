@@ -37,6 +37,9 @@ public class PickUp {
     public PickUpStatus status { get; private set; }
     private readonly GridGraph houseGrid = GameManager.Instance.HouseGrid;
 
+    private PlayerMovement player;
+    private CharacterMovement character;
+
     public PickUp(PickUpType type, int cx, int cy, GameObject prefab_pickup, bool active=true)
     {
         this.cx = cx;
@@ -91,8 +94,10 @@ public class PickUp {
         RefreshPosition();
     }
 
-    public PickUp CharacterTake(Transform t)
+    public PickUp CharacterTake(CharacterMovement c)
     {
+        character = c;
+        var t = c.transform;
         this.status = PickUpStatus.CharacterHeld;
         transform.GetComponent<PickupSprite>().SetCarried(true);
         transform.position = t.position;
@@ -100,8 +105,10 @@ public class PickUp {
         return this;
     }
 
-    public PickUp PlayerTake(Transform t)
+    public PickUp PlayerTake(PlayerMovement p)
     {
+        player = p;
+        var t = p.transform;
         this.status = PickUpStatus.PlayerHeld;
         transform.GetComponent<PickupSprite>().SetCarried(true);
         transform.position = t.position;
@@ -114,17 +121,21 @@ public class PickUp {
         return active && (this.status == PickUpStatus.Unheld);
     }
 
-    public void SetBelievedLocation(int x, int y)
-    {
-        believedX = x;
-        believedY = y;
-        hasBeliefInLocation = true;
-    }
-
     public void UpdateBelievedLocation()
     {
-        believedX = cx;
-        believedY = cy;
+        if (status == PickUpStatus.CharacterHeld && character != null)
+        {
+            believedX = character.cx;
+            believedY = character.cy;
+        } else if (status == PickUpStatus.PlayerHeld && player != null)
+        {
+            believedX = player.cx;
+            believedY = player.cy;
+        } else
+        {
+            believedX = cx;
+            believedY = cy;
+        }
         hasBeliefInLocation = true;
     }
 

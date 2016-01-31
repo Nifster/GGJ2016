@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject objectiveTextObject;
     private TextObject objectiveText;
 
+    [SerializeField] private GameObject scene_unbed;
+
+
+
+
+
     private BlackFilter splashScreen;
 
     private Texture2D meterBack;
@@ -308,12 +314,18 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public void SetBedMadeSprite()
+    {
+        scene_unbed.GetComponent<SpriteRenderer>().enabled = false;
+    }
+
     #region Interact Actions
 
     private void InteractMakeBed()
     {
         if (gameVars.madeBed) return;
         gameVars.madeBed = true;
+        SetBedMadeSprite();
     }
 
 

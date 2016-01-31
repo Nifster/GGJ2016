@@ -28309,6 +28309,7 @@ MonoBehaviour:
   playerObject: {fileID: 562304385}
   characterObject: {fileID: 1615262352}
   objectiveTextObject: {fileID: 815595653}
+  scene_unbed: {fileID: 1634598324}
   realMinX: 0
   realMinY: 0
   realMaxX: 23

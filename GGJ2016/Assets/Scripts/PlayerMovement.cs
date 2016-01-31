@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour {
             var pickup = FindPickUpInFront();
             if (pickup != null && pickup.CanTake())
             {
-                currentlyHeldPickUp = pickup.PlayerTake(transform);
+                currentlyHeldPickUp = pickup.PlayerTake(this);
                 return;
             }
             var interactable = FindInteractableInFront();
