@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     GameObject characterObject;
     private CharacterMovement character;
 
-
+    private BlackFilter splashScreen;
 
     private Texture2D meterBack;
     private Rect rectBack;
@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
         gameVars = new GameVariables();
         character = characterObject.GetComponent<CharacterMovement>();
         player = playerObject.GetComponent<PlayerMovement>();
+        splashScreen = this.GetComponent<BlackFilter>();
 
         meterBack = new Texture2D(1, 1);
         meterBack.SetPixel(0, 0, Color.gray);
@@ -232,19 +233,23 @@ public class GameManager : MonoBehaviour
             GUI.color = Color.yellow;
             GUI.Label(new Rect(0, 0, 200, Screen.height), debugWeightsText);
         }
+
+        Initialise();
+        if (splashScreen.animating) return;
+        
         GUI.color = Color.white;
 
-        float meterWidth = 300;
-        float meterHeight = 30;
-        float position = 0.5f;
-        float yPad = 10;
+        float meterWidth = Screen.width*0.4f;
+        float meterHeight = Screen.height*0.05f;
+        float position = Screen.width*0.5f;
+        float yPad = Screen.height*0.018f;
 
-        rectBack.xMin = Screen.width*position - meterWidth / 2;
+        rectBack.xMin = position - meterWidth / 2;
         rectBack.width = meterWidth;
         rectBack.yMin = yPad;
         rectBack.height = meterHeight;
 
-        rectFront.xMin = Screen.width*position - meterWidth / 2;
+        rectFront.xMin = position - meterWidth / 2;
         rectFront.width = meterWidth * gameVars.suspicionLevel;
         rectFront.yMin = yPad;
         rectFront.height = meterHeight;
@@ -257,7 +262,7 @@ public class GameManager : MonoBehaviour
 
     // Update is called once per frame
 	void Update () {
-	    if (DEBUG_MODE)
+	    if (DEBUG_MODE && !splashScreen.animating)
 	    {
 	        if (Input.GetKey(KeyCode.LeftShift))
 	        {
@@ -266,6 +271,22 @@ public class GameManager : MonoBehaviour
 	        else
 	        {
                 Time.timeScale = 1.0f;
+	        }
+	    }
+
+	    if (gameVars.suspicionLevel > 0.9999f)
+        {
+            if (!splashScreen.animating)
+            {
+                splashScreen.FadeOut(true);
+            }
+	    }
+
+	    if (gameVars.leftHouse)
+	    {
+	        if (!splashScreen.animating)
+	        {
+	            splashScreen.FadeOut(false);
 	        }
 	    }
 	}

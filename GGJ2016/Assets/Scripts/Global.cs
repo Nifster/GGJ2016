@@ -24,6 +24,7 @@ public class Global
     public static void RestartGame()
     {
         dayCount++;
+        Debug.Log(dayCount);
         StartGame();
     }
 

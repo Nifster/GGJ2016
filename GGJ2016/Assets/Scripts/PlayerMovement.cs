@@ -45,6 +45,9 @@ public class PlayerMovement : MonoBehaviour {
         transform.position = newPosition;
 
 		playerAnim = this.GetComponent<Animator>();
+
+        houseGrid.ToRealCoordinates(cx, cy, out startPos.x, out startPos.y);
+        houseGrid.ToRealCoordinates(cx, cy, out endPos.x, out endPos.y);
 	}
 
 	// Update is called once per frame

@@ -22,9 +22,9 @@ public class CharacterMovement : MonoBehaviour
     private Action onStep;
     private OnReachDestinationFunction onReachDestination;
 
-    private float moveTime = 0.3f;
-    private float moveStartTime;
-    private float moveEndTime;
+    private const float moveTime = 0.3f;
+    private float moveStartTime = -moveTime;
+    private float moveEndTime = 0;
 
     private bool isMoving;
     public Orientation currentOrientation { get; private set; }
@@ -62,6 +62,9 @@ public class CharacterMovement : MonoBehaviour
 
 		//get character animator
 		characterAnim = this.GetComponent<Animator>();
+
+        FaceDirection(Orientation.RIGHT);
+        isMoving = false;
     }
 	
 	// Update is called once per frame
@@ -80,7 +83,8 @@ public class CharacterMovement : MonoBehaviour
             {
 	            var currPosition = Vector2.zero;
 	            houseGrid.ToRealCoordinates(cx, cy, out currPosition.x, out currPosition.y);
-	            transform.position = currPosition + (Time.time - moveStartTime)/(moveEndTime - moveStartTime)*(nextPosition - currPosition);
+                if (moveEndTime == moveStartTime) transform.position = nextPosition;
+                else transform.position = currPosition + (Time.time - moveStartTime) / (moveEndTime - moveStartTime) * (nextPosition - currPosition);
 	        }
 	    }
 
