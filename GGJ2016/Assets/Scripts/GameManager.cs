@@ -280,6 +280,12 @@ public class GameManager : MonoBehaviour
 
     // Update is called once per frame
 	void Update () {
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Global.GoToMenu();
+        }
+
 	    if (DEBUG_MODE && !splashScreen.animating)
 	    {
 	        if (Input.GetKey(KeyCode.LeftShift))
