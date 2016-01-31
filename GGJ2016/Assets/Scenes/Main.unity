@@ -28406,6 +28406,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab_blackFilter: {fileID: 155892, guid: 1639d4b5a857d2e43a4706067c89c42e, type: 2}
+  spriteBlack: {fileID: 21300000, guid: e73958f009a253e46b9a6da55167200a, type: 3}
+  spriteCaught: {fileID: 21300000, guid: ab3c62cb54d7fba44a8d6c39c53ba7f1, type: 3}
 --- !u!1 &2040191530
 GameObject:
   m_ObjectHideFlags: 0

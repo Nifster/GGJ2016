@@ -8,11 +8,17 @@ public class BlackFilter : MonoBehaviour
     private GameObject prefab_blackFilter = null;
     private GameObject blackFilter;
 
+    [SerializeField]
+    private Sprite spriteBlack;
+    [SerializeField]
+    private Sprite spriteCaught;
+
     private float alpha = 1f;
     private float alphaSpeed = 1.2f;
 
     private float fadedAlpha = 1f;
 
+    private bool isCaught;
     private bool fadingIn;
     
     private float textShowDelay = -1;
@@ -55,12 +61,18 @@ public class BlackFilter : MonoBehaviour
         UpdateAlpha();
 
         fadingIn = false;
+        isCaught = caught;
         if (caught)
         {
-            textObject.UpdateString("Try again tomorrow!");
+            spriteRenderer.sprite = spriteCaught;
+            textObject.UpdateString("");
+            //textObject.SetColour(Color.black);
+            //textObject.SetLocalPosition(new Vector3(0, 2, 0));
+            //textObject.UpdateString("Try again tomorrow!");
         }
         else
         {
+            spriteRenderer.sprite = spriteBlack;
             textObject.UpdateString("END OF\nDAY " + Global.dayCount);
         }
 
@@ -73,6 +85,7 @@ public class BlackFilter : MonoBehaviour
         textObject.Hide();
         UpdateAlpha();
 
+        spriteRenderer.sprite = spriteBlack;
         fadingIn = true;
         textObject.UpdateString("DAY " + Global.dayCount);
 
@@ -98,8 +111,39 @@ public class BlackFilter : MonoBehaviour
             }
             else
             {
-                UpdateFadeOut(t);
+                if (isCaught)
+                {
+                    UpdateCaught(t);
+                }
+                else
+                {
+                    UpdateFadeOut(t);
+                }
             }
+        }
+    }
+
+
+    void UpdateCaught(float t)
+    {
+        if (t < 0.5f)
+        {
+            float f = t / 0.5f;
+            alpha = f;
+            UpdateAlpha();
+        }
+        else if (t < 2.5f)
+        {
+            alpha = 1f;
+            UpdateAlpha();
+        }
+        else
+        {
+            alpha = 1f;
+            UpdateAlpha();
+            textObject.Hide();
+            Time.timeScale = 1;
+            Global.RestartGame();
         }
     }
 
