@@ -142,6 +142,15 @@ public class CharacterAI {
         }
 
         UpdateSuspicion();
+
+        if (gameVars.minutesPassed > 30)
+        {
+            gameVars.isLate = true;
+        }
+        if (gameVars.minutesPassed > 45)
+        {
+            gameVars.isLateAndAwareOfIt = true;
+        }
     }
 
     public void OnObstructed(int cx, int cy, int nextX, int nextY)
@@ -359,6 +368,7 @@ public class CharacterAI {
         {
             return -0.4f;
         }
+        if (heldItems.Count >= 2) return 0.5f;
         return 0.7f;
     }
 
@@ -386,8 +396,11 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Coffee)) return -10f;
         if (IsHolding(PickUpType.Clothes)) return -100f;
 
-        float value = 0.7f;
-        if (!gameVars.ateCereal) value -= 0.2f;
+        float value = 0.5f;
+        if (heldItems.Count >= 1) value -= 0.5f;
+        if (gameVars.hasDrankCoffee) value += 0.2f;
+        if (gameVars.hasReadNewsPapers) value += 0.2f;
+        if (gameVars.ateCereal) value += 0.2f;
         if (!HasBeliefInLocation(PickUpType.Clothes)) return -0.1f;
         return value;
     }
@@ -409,6 +422,7 @@ public class CharacterAI {
         if (gameVars.hasReadNewsPapers) return -100f;
 
         float value = 0.8f;
+        if (heldItems.Count >= 2) value -= 0.5f;
         if (!gameVars.changedClothes) value -= 0.2f;
         if (gameVars.isLate) value -= 0.7f;
 
@@ -425,6 +439,7 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Coffee)) return -100f;
 
         float value = 0.9f;
+        if (heldItems.Count >= 1) value -= 0.5f;
         if (!gameVars.changedClothes) value -= 0.25f;
         if (gameVars.isLate) value -= 0.7f;
 
@@ -445,8 +460,9 @@ public class CharacterAI {
     {
         if (IsHolding(PickUpType.KeysWallet)) return -100f;
 
-        float value = 0.7f;
-        if (gameVars.hasDrankCoffee) value += 0.3f;
+        float value = 0.8f;
+        if (heldItems.Count >= 2) value -= 0.5f;
+        if (!gameVars.changedClothes) value -= 0.5f;
         if (gameVars.hasReadNewsPapers) value += 0.3f;
         if (gameVars.isLate) value -= 0.1f;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
@@ -459,9 +475,10 @@ public class CharacterAI {
     {
         if (IsHolding(PickUpType.Briefcase)) return -100f;
 
-        float value = 0.9f;
+        float value = 0.8f;
+        if (heldItems.Count >= 2) value -= 0.5f;
         if (!IsHolding(PickUpType.KeysWallet)) value -= 0.3f;
-        if (gameVars.hasDrankCoffee) value += 0.3f;
+        if (!gameVars.changedClothes) value -= 0.5f;
         if (gameVars.hasReadNewsPapers) value += 0.3f;
         if (gameVars.isLate) value -= 0.1f;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
@@ -475,8 +492,10 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Shoes)) return -100f;
 
         float value = 0.8f;
+        if (heldItems.Count >= 3) value -= 0.5f;
         if (!IsHolding(PickUpType.KeysWallet)) value -= 0.2f;
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
+        if (!gameVars.changedClothes) value -= 0.5f;
         if (gameVars.isLate) value -= 0;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
 
@@ -487,7 +506,7 @@ public class CharacterAI {
 
     private float WeightLeaveHouse()
     {
-        float value = 0.2f;
+        float value = 0.5f;
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
         if (!IsHolding(PickUpType.KeysWallet)) value -= 0.1f;
         if (!IsHolding(PickUpType.Shoes)) value -= 0.2f;
