@@ -233,17 +233,19 @@ public class GameManager : MonoBehaviour
         }
         GUI.color = Color.white;
 
-        float meterWidth = 140;
+        float meterWidth = 300;
         float meterHeight = 30;
+        float position = 0.5f;
+        float yPad = 10;
 
-        rectBack.xMin = Screen.width / 2 - meterWidth / 2;
+        rectBack.xMin = Screen.width*position - meterWidth / 2;
         rectBack.width = meterWidth;
-        rectBack.yMin = 10;
+        rectBack.yMin = yPad;
         rectBack.height = meterHeight;
 
-        rectFront.xMin = Screen.width / 2 - meterWidth / 2;
+        rectFront.xMin = Screen.width*position - meterWidth / 2;
         rectFront.width = meterWidth * gameVars.suspicionLevel;
-        rectFront.yMin = 10;
+        rectFront.yMin = yPad;
         rectFront.height = meterHeight;
 
         GUI.color = Color.gray;

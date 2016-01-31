@@ -21,7 +21,7 @@ public class PickupSprite : MonoBehaviour {
     {
         thisTransform = transform;
         childTransform = transform.GetChild(0);
-        startTime = Time.time;
+        startTime = Time.time - Random.Range(0,40f);
         SetCarried(false);
     }
 
