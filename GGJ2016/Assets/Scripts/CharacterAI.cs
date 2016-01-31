@@ -567,6 +567,9 @@ public class CharacterAI {
         if (!gameVars.changedClothes) value -= 0.4f;
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.3f;
         if (!IsHolding(PickUpType.KeysWallet)) value -= 0.3f;
+        if (!gameVars.hasReadNewsPapers) value -= 0.1f;
+        if (!gameVars.hasReadNewsPapers) value -= 0.1f;
+        if (!gameVars.ateCereal) value -= 0.1f;
         if (gameVars.isLate) value += 0.5f;
         if (gameVars.isLateAndAwareOfIt) value += 0.3f;
         return value;
@@ -728,7 +731,12 @@ public class CharacterAI {
                 DropItem(PickUpType.Bowl, dx: 0, dy: 1);
                 gameManager.pickups[PickUpType.Cereal].Deactivate();
                 gameManager.pickups[PickUpType.Bowl].Deactivate();
-                gameManager.pickups[PickUpType.Milk].Deactivate();
+                
+                var milk = gameManager.pickups[PickUpType.Milk];
+                if (Math.Abs(milk.cx - GameVariables.diningTableX) + Math.Abs(milk.cy - GameVariables.diningTableY) <= 1)
+                {
+                    milk.Deactivate();
+                }
                 gameVars.ateCereal = true;
             }
         );
@@ -988,7 +996,7 @@ public class CharacterAI {
 
     private void OnReachGoToilet(int cx, int cy)
     {
-        charState.StartJob(JobType.GO_TOILET, 1.8f);
+        charState.StartJob(JobType.GO_TOILET, 2.4f);
     }
 
     private void OnReachFindToothbrush(int cx, int cy)
@@ -1004,7 +1012,7 @@ public class CharacterAI {
 
     private void OnReachBrushTeeth(int cx, int cy)
     {
-        charState.StartJob(JobType.BRUSH_TEETH, 2.4f);
+        charState.StartJob(JobType.BRUSH_TEETH, 2.6f);
     }
 
     private void OnReachGetMilk(int cx, int cy)
@@ -1032,7 +1040,6 @@ public class CharacterAI {
 
     private void OnReachEatCereal(int cx, int cy)
     {
-        // TODO: Add Clause: no milk on table. -> put down cereal/bowl, find milk.
         charState.StartJob(JobType.EAT_CEREAL, 2f);
     }
 
@@ -1090,7 +1097,7 @@ public class CharacterAI {
 
     private void OnReachMakeBed(int cx, int cy)
     {
-        charState.StartJob(JobType.MAKE_BED, 3f);
+        charState.StartJob(JobType.MAKE_BED, 4f);
     }
 
     private void OnReachLeaveHouse(int cx, int cy)
