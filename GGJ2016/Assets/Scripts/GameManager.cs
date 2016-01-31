@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     GameObject characterObject;
     private CharacterMovement character;
 
+    [SerializeField] private GameObject objectiveTextObject;
+    private TextObject objectiveText;
+
     private BlackFilter splashScreen;
 
     private Texture2D meterBack;
@@ -97,6 +100,7 @@ public class GameManager : MonoBehaviour
         character = characterObject.GetComponent<CharacterMovement>();
         player = playerObject.GetComponent<PlayerMovement>();
         splashScreen = this.GetComponent<BlackFilter>();
+        objectiveText = objectiveTextObject.GetComponent<TextObject>();
 
         meterBack = new Texture2D(1, 1);
         meterBack.SetPixel(0, 0, Color.gray);
@@ -154,6 +158,8 @@ public class GameManager : MonoBehaviour
 
         //initialise pickupables
         InitialisePickupables();
+
+        InitialiseObjective();
     }
 
     private void InitialiseInteractables()
@@ -290,6 +296,16 @@ public class GameManager : MonoBehaviour
 	        }
 	    }
 	}
+
+    private void InitialiseObjective()
+    {
+        SetObjective("Get Pierce to make the bed!");
+    }
+
+    public void SetObjective(string objective)
+    {
+        objectiveText.UpdateString("Goal\n" + objective);
+    }
 
 
     #region Interact Actions

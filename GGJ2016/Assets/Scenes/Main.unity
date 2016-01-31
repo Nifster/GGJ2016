@@ -11864,6 +11864,70 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1001 &815595652
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 488384, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 488384, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 2.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 488384, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 488384, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 488384, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 488384, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 488384, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 488384, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 10286736, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_FontSize
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 10286736, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_Text
+      value: 'Goal:
+
+        Get Pierce to make the bed!'
+      objectReference: {fileID: 0}
+    - target: {fileID: 131296, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_Name
+      value: ObjectiveText
+      objectReference: {fileID: 0}
+    - target: {fileID: 10286736, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+      propertyPath: m_Anchor
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &815595653 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 131296, guid: 49d6d593abc72a249808a60001eb6614, type: 2}
+  m_PrefabInternal: {fileID: 815595652}
 --- !u!1 &816914568
 GameObject:
   m_ObjectHideFlags: 0
@@ -28244,6 +28308,7 @@ MonoBehaviour:
   prefab_pickup: {fileID: 192516, guid: 61fe23a075219a143ba3044ddf63a422, type: 2}
   playerObject: {fileID: 562304385}
   characterObject: {fileID: 1615262352}
+  objectiveTextObject: {fileID: 815595653}
   realMinX: 0
   realMinY: 0
   realMaxX: 23
