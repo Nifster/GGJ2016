@@ -8299,10 +8299,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e5a9dc016ab72428f2ba19e29d7329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveLeft: 97
-  moveRight: 100
-  moveUp: 119
-  moveDown: 115
+  moveLeft: 276
+  moveRight: 275
+  moveUp: 273
+  moveDown: 274
   gameManager: {fileID: 2038361806}
   sprites:
   - {fileID: 21300000, guid: dc732d2652e0ef742b0a73084f314f1f, type: 3}
