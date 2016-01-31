@@ -96,12 +96,6 @@ public class CharacterAI {
         }
     }
 
-
-    private void ChangeState(CharacterState state)
-    {
-
-    }
-
     public DecisionType MakeDecision()
     {
         var debugStatusTextList = new List<string>();

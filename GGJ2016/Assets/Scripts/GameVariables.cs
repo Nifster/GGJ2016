@@ -10,7 +10,7 @@ public class GameVariables
         get
         {
             float t = Time.time - startTime;
-            return t/8;
+            return t/3;
         }
     }
 
@@ -83,7 +83,7 @@ public class GameVariables
     public const int couchY = 13;
 
 
-    public const float coffeeMakeTime = 60f;
+    public const float coffeeMakeTime = 10f;
 
     // Functions
     public void AddSuspicion(float val)
