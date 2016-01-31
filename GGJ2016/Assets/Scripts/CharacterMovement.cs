@@ -22,7 +22,7 @@ public class CharacterMovement : MonoBehaviour
     private Action onStep;
     private OnReachDestinationFunction onReachDestination;
 
-    private float moveTime = 0.5f;
+    private float moveTime = 0.3f;
     private float moveStartTime;
     private float moveEndTime;
 

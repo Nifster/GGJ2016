@@ -18,9 +18,12 @@ public class PlayerMovement : MonoBehaviour {
     public int cx { get; private set; }
     public int cy { get; private set; }
 
-    [SerializeField]
-	float movementCooldown;
-	float cooldownTimer;
+    private Vector2 startPos;
+    private Vector2 endPos;
+
+    private float moveStartTime;
+    private float moveEndTime;
+    private float moveCooldown = 0.2f;
 
 	Animator playerAnim;
 
@@ -54,8 +57,10 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             TryInteract();
-        }	
-	}
+        }
+
+        RefreshPosition();
+    }
 
     private void TryInteract()
     {
@@ -118,10 +123,10 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void MovementCheck(){
-		cooldownTimer -= Time.deltaTime;
+        
 
 		int dx =0, dy = 0;
-		if (cooldownTimer < 0) {
+		if (Time.time > moveEndTime) {
 			if(Input.GetKey(moveRight)) {
 				orientation = Orientation.RIGHT;
                 dx += ToMovementX(orientation);
@@ -150,19 +155,26 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (dx != 0 || dy != 0) {
 			if(!houseGrid.IsBlocked(cx+dx,cy+dy))
-			{
+            {
+                houseGrid.ToRealCoordinates(cx, cy, out startPos.x, out startPos.y);
 			    cx += dx;
 			    cy += dy;
-			    var newPosition = Vector2.zero;
-			    houseGrid.ToRealCoordinates(cx, cy, out newPosition.x, out newPosition.y);
-			    this.transform.position = newPosition;
+                houseGrid.ToRealCoordinates(cx, cy, out endPos.x, out endPos.y);
 
-				cooldownTimer = movementCooldown;
-			}
+                moveStartTime = Time.time;
+                moveEndTime = moveStartTime + moveCooldown;
+            }
 		}
 	}
 
-	Interactable FindInteractableInFront()
+    private void RefreshPosition()
+    {
+        float f = Mathf.Clamp((Time.time - moveStartTime)/moveCooldown, 0, 1);
+        var newPosition = startPos + f*(endPos - startPos);
+        this.transform.position = newPosition;
+    }
+
+    Interactable FindInteractableInFront()
 	{
 		int gx, gy;
 		houseGrid.ToGridCoordinates (this.transform.position.x, this.transform.position.y, out gx, out gy);

@@ -170,12 +170,12 @@ public class CharacterAI {
 
     private void UpdateSuspicion()
     {
-        gameVars.AddSuspicion(-0.001f);
+        gameVars.AddSuspicion(-0.00001f);
         if (CanSee(player.cx, player.cy))
         {
             if (player.IsHoldingItem())
             {
-                gameVars.AddSuspicion(0.04f);
+                gameVars.AddSuspicion(0.02f);
             }
         }
     }

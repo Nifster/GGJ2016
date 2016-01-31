@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Global.Initialise();
     }
 
 
