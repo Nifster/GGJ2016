@@ -10,14 +10,19 @@ public class PickupSprite : MonoBehaviour {
     private float loop = 2f;
     private float startTime;
 
-    private float yDiff = 0.3f;
-    private float xDiff = 0.1f;
+    private float yDiff = 0.15f;
+    private float xDiff = 0.05f;
+
+    private Vector3 carriedVec = new Vector3(0.1f, 0.6f, 0);
+    private Vector3 dispVec = Vector3.zero;
+
 
     private void Start()
     {
         thisTransform = transform;
         childTransform = transform.GetChild(0);
         startTime = Time.time;
+        SetCarried(false);
     }
 
     private void Update()
@@ -29,7 +34,19 @@ public class PickupSprite : MonoBehaviour {
         float yValue = yDiff*d;
         float xValue = xDiff*d;
 
-        childTransform.position = thisTransform.position + new Vector3(xValue, yValue, 0);
+        childTransform.position = thisTransform.position + new Vector3(xValue, yValue, 0) + dispVec;
+    }
+
+    public void SetCarried(bool value)
+    {
+        if (value)
+        {
+            dispVec = carriedVec;
+        }
+        else
+        {
+            dispVec = Vector3.zero;
+        }
     }
 
     public void SetVisible(bool value)

@@ -24,7 +24,7 @@ public enum PickUpStatus
 
 public class PickUp {
     private Transform transform;
-
+    
     public PickUpType type { get; private set; }
     public int cx { get; private set; }
     public int cy { get; private set; }
@@ -85,6 +85,7 @@ public class PickUp {
         this.cx = cx;
         this.cy = cy;
         this.status = PickUpStatus.Unheld;
+        transform.GetComponent<PickupSprite>().SetCarried(false);
         Debug.Log(cx + ", " + cy + ", " + status);
         transform.parent = null;
         RefreshPosition();
@@ -93,6 +94,7 @@ public class PickUp {
     public PickUp CharacterTake(Transform t)
     {
         this.status = PickUpStatus.CharacterHeld;
+        transform.GetComponent<PickupSprite>().SetCarried(true);
         transform.position = t.position;
         transform.parent = t;
         return this;
@@ -101,6 +103,7 @@ public class PickUp {
     public PickUp PlayerTake(Transform t)
     {
         this.status = PickUpStatus.PlayerHeld;
+        transform.GetComponent<PickupSprite>().SetCarried(true);
         transform.position = t.position;
         transform.parent = t;
         return this;
