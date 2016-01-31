@@ -7,6 +7,8 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     private const bool DEBUG_MODE = true;
+    public static string debugStatusText;
+    public static string debugWeightsText;
 
 
     [SerializeField] private GameObject prefab_pickup;
@@ -32,7 +34,6 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    public static string debugStatusText;
 
     private GridGraph houseGrid;
     private GameVariables gameVars;
@@ -224,7 +225,14 @@ public class GameManager : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.Label(new Rect(0, 0, 100, 100), debugStatusText);
+        if (DEBUG_MODE)
+        {
+            GUI.color = Color.white;
+            GUI.Label(new Rect(Screen.width-100, 0, 100, 100), debugStatusText);
+            GUI.color = Color.yellow;
+            GUI.Label(new Rect(0, 0, 200, Screen.height), debugWeightsText);
+        }
+        GUI.color = Color.white;
 
         float meterWidth = 140;
         float meterHeight = 30;

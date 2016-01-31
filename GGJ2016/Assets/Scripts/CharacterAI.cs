@@ -104,6 +104,8 @@ public class CharacterAI {
 
     public DecisionType MakeDecision()
     {
+        var debugStatusTextList = new List<string>();
+
         float maxWeight = float.NegativeInfinity;
         DecisionType decision = DecisionType.None;
         foreach (DecisionType decType in Enum.GetValues(typeof(DecisionType)))
@@ -115,7 +117,11 @@ public class CharacterAI {
                 maxWeight = weight;
                 decision = decType;
             }
+
+            debugStatusTextList.Add(decType + " : " + weight);
         }
+
+        GameManager.debugWeightsText = string.Join("\n", debugStatusTextList.ToArray());
         GameManager.debugStatusText = decision.ToString() + " / " + charState.state + " / " + charState.currentJobType + 
             ((charState.currentJobType == JobType.NONE) ? "" : " (" + (charState.ProgressPercent*100) + "%)");
         return decision;
@@ -123,11 +129,11 @@ public class CharacterAI {
 
     public void Update()
     {
-        if (gameVars.isCoffeeBeingMade && !gameVars.coffeeFinished)
+        if (gameVars.isCoffeeBeingMade && !gameVars.finishedMakingCoffee)
         {
             if (Time.time > gameVars.coffeeFinishTime)
             {
-                gameVars.coffeeFinished = true;
+                gameVars.finishedMakingCoffee = true;
                 gameManager.pickups[PickUpType.Coffee].Activate();
             }
         }
@@ -183,7 +189,7 @@ public class CharacterAI {
 
     private bool HasBeliefInLocation(PickUpType item)
     {
-        return gameManager.pickups[item].hasBeliefInLocation;
+        return gameManager.pickups[item].hasBeliefInLocation || CanSee(item);
     }
 
     private void LoseBeliefInLocation(PickUpType item)
@@ -301,7 +307,7 @@ public class CharacterAI {
     {
         if (IsHolding(PickUpType.Toothbrush)) return -100f;
         if (gameVars.brushedTeeth) return -1f;
-        if (!HasBeliefInLocation(PickUpType.Toothbrush) && !CanSee(PickUpType.Toothbrush))
+        if (!HasBeliefInLocation(PickUpType.Toothbrush))
         {
             if (gameVars.findingToothbrushSearchedRoom) return -0.4f;
             return 0.88f;
@@ -324,7 +330,7 @@ public class CharacterAI {
         if (gameVars.ateCereal) return -100f;
         if (IsHolding(PickUpType.Milk)) return -100f;
         if (ThinksMilkIsOnDiningTable()) return -10f;
-        if (!HasBeliefInLocation(PickUpType.Milk) && !CanSee(PickUpType.Milk))
+        if (!HasBeliefInLocation(PickUpType.Milk))
         {
             return -0.4f;
         }
@@ -343,7 +349,7 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Cereal)) return -100f;
         if (!ThinksMilkIsOnDiningTable()) return 0f;
         if (gameVars.isLate) return 0.1f;
-        if (!HasBeliefInLocation(PickUpType.Cereal) && !CanSee(PickUpType.Cereal))
+        if (!HasBeliefInLocation(PickUpType.Cereal))
         {
             return -0.4f;
         }
@@ -356,7 +362,7 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Bowl)) return -100f;
         if (!ThinksMilkIsOnDiningTable()) return 0f;
         if (gameVars.isLate) return 0.1f;
-        if (!HasBeliefInLocation(PickUpType.Bowl) && !CanSee(PickUpType.Bowl))
+        if (!HasBeliefInLocation(PickUpType.Bowl))
         {
             return -0.4f;
         }
@@ -375,19 +381,21 @@ public class CharacterAI {
     {
         if (gameVars.isCoffeeBeingMade) return -100f;
 
-        float value = 0.7f;
-        if (!ThinksMilkIsOnDiningTable()) return 0f;
+        float value = 0.8f;
+        if (!gameVars.ateCereal) value -= 0.2f;
         if (gameVars.isLate) value -= 0.6f;
         return 0.7f;
     }
 
     private float WeightGetClothes()
     {
+        if (gameVars.changedClothes) return -100f;
         if (IsHolding(PickUpType.Coffee)) return -10f;
         if (IsHolding(PickUpType.Clothes)) return -100f;
 
         float value = 0.7f;
         if (!gameVars.ateCereal) value -= 0.2f;
+        if (!HasBeliefInLocation(PickUpType.Clothes)) return -0.1f;
         return value;
     }
 
@@ -405,33 +413,38 @@ public class CharacterAI {
     private float WeightGetNewspaper()
     {
         if (IsHolding(PickUpType.Newspaper)) return -100f;
+        if (gameVars.hasReadNewsPapers) return -100f;
 
-        float value = 0.6f;
-        if (!gameVars.changedClothes) value -= 0.3f;
+        float value = 0.8f;
+        if (!gameVars.changedClothes) value -= 0.2f;
         if (gameVars.isLate) value -= 0.7f;
+
+        if (!HasBeliefInLocation(PickUpType.Newspaper)) return -0.1f;
         return value;
     }
 
     private float WeightGetCoffee()
     {
+        if (!gameVars.isCoffeeBeingMade) return -100f;
+        if (gameVars.hasDrankCoffee) return -100f;
         if (IsHolding(PickUpType.Clothes)) return -10f;
-        if (!gameVars.coffeeFinished) return -100f;
+        if (!gameVars.finishedMakingCoffee) return -10f;
         if (IsHolding(PickUpType.Coffee)) return -100f;
 
-        float value = 0.6f;
-        if (gameVars.coffeeFinished) value += 0.5f;
-        if (gameVars.isCoffeeBeingMade) value += 0.3f;
-        if (!gameVars.changedClothes) value -= 0.3f;
+        float value = 0.9f;
+        if (!gameVars.changedClothes) value -= 0.25f;
         if (gameVars.isLate) value -= 0.7f;
+
+        if (!HasBeliefInLocation(PickUpType.Coffee)) return -0.1f;
         return value;
     }
 
     private float WeightSitOnCouch()
     {
         float value = 0f;
-        if (IsHolding(PickUpType.Coffee)) value += 0.2f;
-        if (IsHolding(PickUpType.Newspaper)) value += 0.4f;
-        if (gameVars.isLate) value -= 0.7f;
+        if (IsHolding(PickUpType.Coffee)) value += 0.7f;
+        if (IsHolding(PickUpType.Newspaper)) value += 0.7f;
+        if (gameVars.isLate) value -= 1.5f;
         return value;
     }
 
@@ -444,6 +457,8 @@ public class CharacterAI {
         if (gameVars.hasReadNewsPapers) value += 0.3f;
         if (gameVars.isLate) value -= 0.1f;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
+
+        if (!HasBeliefInLocation(PickUpType.Keys)) value -= 0.2f;
         return value;
     }
 
@@ -457,6 +472,8 @@ public class CharacterAI {
         if (gameVars.hasReadNewsPapers) value += 0.3f;
         if (gameVars.isLate) value -= 0.1f;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
+
+        if (!HasBeliefInLocation(PickUpType.Briefcase)) value -= 0.2f;
         return value;
     }
 
@@ -469,6 +486,8 @@ public class CharacterAI {
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
         if (gameVars.isLate) value -= 0;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
+
+        if (!HasBeliefInLocation(PickUpType.Shoes)) value -= 0.2f;
         return value;
     }
 
@@ -683,6 +702,8 @@ public class CharacterAI {
             (gameVars) =>
             {
                 gameVars.changedClothes = true;
+                DropItem(PickUpType.Clothes);
+                gameManager.pickups[PickUpType.Clothes].Deactivate();
             }
         );
     }
@@ -707,7 +728,7 @@ public class CharacterAI {
         DefaultUpdateFunction(
             GameVariables.couchX,
             GameVariables.couchY,
-            Orientation.RIGHT,
+            Orientation.UP,
             OnReachSitOnCouch,
             JobType.SIT_ON_COUCH,
             (gameVars) =>

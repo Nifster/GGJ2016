@@ -22,7 +22,7 @@ public class GameVariables
 
     public bool isCoffeeBeingMade = false;
     public float coffeeFinishTime = float.PositiveInfinity;
-    public bool coffeeFinished = false;
+    public bool finishedMakingCoffee = false;
     
     public bool changedClothes = false;
 
