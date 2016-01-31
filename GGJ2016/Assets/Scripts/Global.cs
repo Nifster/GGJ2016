@@ -17,6 +17,7 @@ public class Global
     public static void Initialise()
     {
         if (initialised) return;
+        initialised = true;
         achievements = new bool[nAchievements];
         Reset();
     }
