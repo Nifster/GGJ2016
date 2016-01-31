@@ -51,6 +51,13 @@ public class CharacterAI {
             {DecisionType.GetKeysAndWallet, WeightGetKeysAndWallet},
             {DecisionType.GetBriefcase, WeightGetBriefcase},
             {DecisionType.GetShoes, WeightGetShoes},
+            
+            {DecisionType.SEARCH_A, WeightSearchA},
+            {DecisionType.SEARCH_B, WeightSearchB},
+            {DecisionType.SEARCH_C, WeightSearchC},
+            {DecisionType.SEARCH_D, WeightSearchD},
+            {DecisionType.SEARCH_E, WeightSearchE},
+            {DecisionType.SEARCH_F, WeightSearchF},
 
             {DecisionType.LeaveHouse, WeightLeaveHouse},
         };
@@ -77,6 +84,13 @@ public class CharacterAI {
             {DecisionType.GetKeysAndWallet, UpdateGetKeysAndWallet},
             {DecisionType.GetBriefcase, UpdateGetBriefcase},
             {DecisionType.GetShoes, UpdateGetShoes},
+            
+            {DecisionType.SEARCH_A, UpdateSearchA},
+            {DecisionType.SEARCH_B, UpdateSearchB},
+            {DecisionType.SEARCH_C, UpdateSearchC},
+            {DecisionType.SEARCH_D, UpdateSearchD},
+            {DecisionType.SEARCH_E, UpdateSearchE},
+            {DecisionType.SEARCH_F, UpdateSearchF},
 
             {DecisionType.LeaveHouse, UpdateLeaveHouse},
         };
@@ -311,7 +325,7 @@ public class CharacterAI {
         if (gameVars.brushedTeeth) return -1f;
         if (!HasBeliefInLocation(PickUpType.Toothbrush))
         {
-            if (gameVars.findingToothbrushSearchedRoom) return -0.4f;
+            if (gameVars.findingToothbrushSearchedRoom) return -1f;
             return 0.88f;
         }
 
@@ -334,7 +348,7 @@ public class CharacterAI {
         if (ThinksMilkIsOnDiningTable()) return -10f;
         if (!HasBeliefInLocation(PickUpType.Milk))
         {
-            return -0.4f;
+            return -1f;
         }
         return 0.82f;
     }
@@ -353,7 +367,7 @@ public class CharacterAI {
         if (gameVars.isLate) return 0.1f;
         if (!HasBeliefInLocation(PickUpType.Cereal))
         {
-            return -0.4f;
+            return -1f;
         }
         return 0.71f;
     }
@@ -366,7 +380,7 @@ public class CharacterAI {
         if (gameVars.isLate) return 0.1f;
         if (!HasBeliefInLocation(PickUpType.Bowl))
         {
-            return -0.4f;
+            return -1f;
         }
         if (heldItems.Count >= 2) return 0.5f;
         return 0.7f;
@@ -401,7 +415,7 @@ public class CharacterAI {
         if (gameVars.hasDrankCoffee) value += 0.2f;
         if (gameVars.hasReadNewsPapers) value += 0.2f;
         if (gameVars.ateCereal) value += 0.2f;
-        if (!HasBeliefInLocation(PickUpType.Clothes)) return -0.1f;
+        if (!HasBeliefInLocation(PickUpType.Clothes)) return -0.9f;
         return value;
     }
 
@@ -426,7 +440,7 @@ public class CharacterAI {
         if (!gameVars.changedClothes) value -= 0.2f;
         if (gameVars.isLate) value -= 0.7f;
 
-        if (!HasBeliefInLocation(PickUpType.Newspaper)) return -0.1f;
+        if (!HasBeliefInLocation(PickUpType.Newspaper)) return -0.9f;
         return value;
     }
 
@@ -443,7 +457,7 @@ public class CharacterAI {
         if (!gameVars.changedClothes) value -= 0.25f;
         if (gameVars.isLate) value -= 0.7f;
 
-        if (!HasBeliefInLocation(PickUpType.Coffee)) return -0.1f;
+        if (!HasBeliefInLocation(PickUpType.Coffee)) return -0.9f;
         return value;
     }
 
@@ -467,7 +481,7 @@ public class CharacterAI {
         if (gameVars.isLate) value -= 0.1f;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
 
-        if (!HasBeliefInLocation(PickUpType.KeysWallet)) value -= 0.2f;
+        if (!HasBeliefInLocation(PickUpType.KeysWallet)) value -= 0.9f;
         return value;
     }
 
@@ -483,7 +497,7 @@ public class CharacterAI {
         if (gameVars.isLate) value -= 0.1f;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
 
-        if (!HasBeliefInLocation(PickUpType.Briefcase)) value -= 0.2f;
+        if (!HasBeliefInLocation(PickUpType.Briefcase)) value -= 0.9f;
         return value;
     }
 
@@ -499,7 +513,49 @@ public class CharacterAI {
         if (gameVars.isLate) value -= 0;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
 
-        if (!HasBeliefInLocation(PickUpType.Shoes)) value -= 0.2f;
+        if (!HasBeliefInLocation(PickUpType.Shoes)) value -= 0.9f;
+        return value;
+    }
+
+    private float WeightSearchA()
+    {
+        float value = 0.3f;
+        if (gameVars.searchedA) value -= 0.4f;
+        return value;
+    }
+
+    private float WeightSearchB()
+    {
+        float value = 0.3f;
+        if (gameVars.searchedB) value -= 0.4f;
+        return value;
+    }
+
+    private float WeightSearchC()
+    {
+        float value = 0.3f;
+        if (gameVars.searchedC) value -= 0.4f;
+        return value;
+    }
+
+    private float WeightSearchD()
+    {
+        float value = 0.3f;
+        if (gameVars.searchedD) value -= 0.4f;
+        return value;
+    }
+
+    private float WeightSearchE()
+    {
+        float value = 0.3f;
+        if (gameVars.searchedE) value -= 0.4f;
+        return value;
+    }
+
+    private float WeightSearchF()
+    {
+        float value = 0.3f;
+        if (gameVars.searchedF) value -= 0.4f;
         return value;
     }
 
@@ -507,12 +563,10 @@ public class CharacterAI {
     private float WeightLeaveHouse()
     {
         float value = 0.5f;
-        if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
-        if (!IsHolding(PickUpType.KeysWallet)) value -= 0.1f;
-        if (!IsHolding(PickUpType.Shoes)) value -= 0.2f;
-        if (!gameVars.changedClothes) value -= 0.2f;
-        if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
-        if (!IsHolding(PickUpType.KeysWallet)) value -= 0.2f;
+        if (!IsHolding(PickUpType.Shoes)) value -= 0.4f;
+        if (!gameVars.changedClothes) value -= 0.4f;
+        if (!IsHolding(PickUpType.Briefcase)) value -= 0.3f;
+        if (!IsHolding(PickUpType.KeysWallet)) value -= 0.3f;
         if (gameVars.isLate) value += 0.5f;
         if (gameVars.isLateAndAwareOfIt) value += 0.3f;
         return value;
@@ -810,6 +864,121 @@ public class CharacterAI {
             }
         );
     }
+
+
+    private void UpdateSearchA()
+    {
+        int targetX = GameVariables.searchAX;
+        int targetY = GameVariables.searchAY;
+        switch (charState.state)
+        {
+            case State.WALKING:
+                WalkTowards(targetX, targetY);
+                break;
+            case State.STANDING:
+                PathFindTowards(targetX, targetY, Orientation.DOWN, (cx, cy) => gameVars.searchedA = true);
+                break;
+            case State.DOING_JOB:
+                charState.CancelJob();
+                break;
+        }
+    }
+
+
+    private void UpdateSearchB()
+    {
+        int targetX = GameVariables.searchBX;
+        int targetY = GameVariables.searchBY;
+        switch (charState.state)
+        {
+            case State.WALKING:
+                WalkTowards(targetX, targetY);
+                break;
+            case State.STANDING:
+                PathFindTowards(targetX, targetY, Orientation.DOWN, (cx, cy) => gameVars.searchedB = true);
+                break;
+            case State.DOING_JOB:
+                charState.CancelJob();
+                break;
+        }
+    }
+
+
+    private void UpdateSearchC()
+    {
+        int targetX = GameVariables.searchCX;
+        int targetY = GameVariables.searchCY;
+        switch (charState.state)
+        {
+            case State.WALKING:
+                WalkTowards(targetX, targetY);
+                break;
+            case State.STANDING:
+                PathFindTowards(targetX, targetY, Orientation.DOWN, (cx, cy) => gameVars.searchedC = true);
+                break;
+            case State.DOING_JOB:
+                charState.CancelJob();
+                break;
+        }
+    }
+
+
+    private void UpdateSearchD()
+    {
+        int targetX = GameVariables.searchDX;
+        int targetY = GameVariables.searchDY;
+        switch (charState.state)
+        {
+            case State.WALKING:
+                WalkTowards(targetX, targetY);
+                break;
+            case State.STANDING:
+                PathFindTowards(targetX, targetY, Orientation.DOWN, (cx, cy) => gameVars.searchedD = true);
+                break;
+            case State.DOING_JOB:
+                charState.CancelJob();
+                break;
+        }
+    }
+
+
+    private void UpdateSearchF()
+    {
+        int targetX = GameVariables.searchFX;
+        int targetY = GameVariables.searchFY;
+        switch (charState.state)
+        {
+            case State.WALKING:
+                WalkTowards(targetX, targetY);
+                break;
+            case State.STANDING:
+                PathFindTowards(targetX, targetY, Orientation.DOWN, (cx, cy) => gameVars.searchedF = true);
+                break;
+            case State.DOING_JOB:
+                charState.CancelJob();
+                break;
+        }
+    }
+
+
+    private void UpdateSearchE()
+    {
+        int targetX = GameVariables.searchEX;
+        int targetY = GameVariables.searchEY;
+        switch (charState.state)
+        {
+            case State.WALKING:
+                WalkTowards(targetX, targetY);
+                break;
+            case State.STANDING:
+                PathFindTowards(targetX, targetY, Orientation.DOWN, (cx,cy)=>gameVars.searchedE = true);
+                break;
+            case State.DOING_JOB:
+                charState.CancelJob();
+                break;
+        }
+    }
+
 
 
 #endregion

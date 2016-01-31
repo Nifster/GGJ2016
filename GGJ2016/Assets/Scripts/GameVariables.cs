@@ -47,6 +47,14 @@ public class GameVariables
     public bool isLateAndAwareOfIt = false;
 
 
+    public bool searchedA = false;
+    public bool searchedB = false;
+    public bool searchedC = false;
+    public bool searchedD = false;
+    public bool searchedE = false;
+    public bool searchedF = false;
+
+
     // Constants
     public const int toiletBowlX = 7;
     public const int toiletBowlY = 7;
@@ -81,6 +89,24 @@ public class GameVariables
 
     public const int couchX = 12;
     public const int couchY = 13;
+
+    public const int searchAX = 9;
+    public const int searchAY = 4;
+
+    public const int searchBX = 2;
+    public const int searchBY = 16;
+
+    public const int searchCX = 18;
+    public const int searchCY = 1;
+
+    public const int searchDX = 11;
+    public const int searchDY = 11;
+
+    public const int searchEX = 9;
+    public const int searchEY = 9;
+
+    public const int searchFX = 1;
+    public const int searchFY = 7;
 
 
     public const float coffeeMakeTime = 10f;

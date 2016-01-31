@@ -24,6 +24,13 @@ public enum DecisionType {
     LeaveHouse,
 
     MakeBed,
+
+    SEARCH_A,
+    SEARCH_B,
+    SEARCH_C,
+    SEARCH_D,
+    SEARCH_E,
+    SEARCH_F,
 }
 
 
