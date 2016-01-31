@@ -7,7 +7,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
-    private const bool DEBUG_MODE = true;
+    private const bool DEBUG_MODE = false;
     public static string debugStatusText;
     public static string debugWeightsText;
 
@@ -319,7 +319,7 @@ public class GameManager : MonoBehaviour
 
     private void InitialiseObjective()
     {
-        SetObjective("Make Pierce late for work!");
+        SetObjective("Make Pierce late for work!\n[Controls: Arrow Keys / Space]");
     }
 
     public void SetObjective(string objective)
