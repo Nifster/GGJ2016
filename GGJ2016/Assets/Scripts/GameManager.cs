@@ -166,16 +166,15 @@ public class GameManager : MonoBehaviour
     {
         pickups = new PickUp[]
         {
-            new PickUp(PickUpType.Toothbrush, 2, 7, prefab_pickup),
-            new PickUp(PickUpType.Milk, 9, 6, prefab_pickup),
-            new PickUp(PickUpType.Cereal, 9, 3, prefab_pickup),
-            new PickUp(PickUpType.Bowl, 16, 6, prefab_pickup),
-            new PickUp(PickUpType.Coffee, 13, 6, prefab_pickup),
-            new PickUp(PickUpType.Clothes, 4, 17, prefab_pickup),
-            new PickUp(PickUpType.Newspaper, 19, 2, prefab_pickup),
-            new PickUp(PickUpType.Keys, 15, 3, prefab_pickup),
-            new PickUp(PickUpType.Wallet, 14, 3, prefab_pickup),
-            new PickUp(PickUpType.Briefcase, 13, 3, prefab_pickup),
+            new PickUp(PickUpType.Toothbrush, 4, 9, prefab_pickup),
+            new PickUp(PickUpType.Milk, 10, 6, prefab_pickup),
+            new PickUp(PickUpType.Cereal, 10, 3, prefab_pickup),
+            new PickUp(PickUpType.Bowl, 15, 6, prefab_pickup),
+            new PickUp(PickUpType.Coffee, 11, 6, prefab_pickup, active:false),
+            new PickUp(PickUpType.Clothes, 6, 17, prefab_pickup),
+            new PickUp(PickUpType.Newspaper, 19, 1, prefab_pickup),
+            new PickUp(PickUpType.KeysWallet, 15, 3, prefab_pickup),
+            new PickUp(PickUpType.Briefcase, 20, 12, prefab_pickup),
             new PickUp(PickUpType.Shoes, 21, 3, prefab_pickup),
         }.ToDictionary(p => p.type);
     }

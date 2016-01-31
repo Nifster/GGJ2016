@@ -10,8 +10,7 @@ public enum PickUpType{
 	Coffee,
 	Clothes,
 	Newspaper,
-	Keys,
-	Wallet,
+	KeysWallet,
 	Briefcase,
 	Shoes,
 }
@@ -50,22 +49,23 @@ public class PickUp {
         this.type = type;
         var go = MonoBehaviour.Instantiate(prefab_pickup) as GameObject;
         transform = go.transform;
+        go.GetComponent<PickupSprite>().SetSprite(type);
         RefreshPosition();
 
         this.active = active;
-        transform.GetComponent<SpriteRenderer>().enabled = active;
+        transform.GetComponent<PickupSprite>().SetVisible(active);
     }
 
     public void Activate()
     {
         active = true;
-        transform.GetComponent<SpriteRenderer>().enabled = true;
+        transform.GetComponent<PickupSprite>().SetVisible(true);
     }
 
     public void Deactivate()
     {
         active = false;
-        transform.GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetComponent<PickupSprite>().SetVisible(false);
     }
 
     private void RefreshPosition()

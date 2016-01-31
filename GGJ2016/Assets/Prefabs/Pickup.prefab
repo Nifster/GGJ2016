@@ -10,6 +10,22 @@ GameObject:
   - 4: {fileID: 433384}
   - 212: {fileID: 21248746}
   m_Layer: 0
+  m_Name: Pickup Sprite
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &192516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 440676}
+  - 114: {fileID: 11452268}
+  m_Layer: 0
   m_Name: Pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23,11 +39,47 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 180142}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.086379096, y: 0.9606577, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
+  m_Father: {fileID: 440676}
+  m_RootOrder: 0
+--- !u!4 &440676
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192516}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 30.234324, y: 3.1737854, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 433384}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11452268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9348999633e460418b10f848fa8f3dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 0}
+  - {fileID: 21300000, guid: 7da916a787b44f342884b7fbeb98857e, type: 3}
+  - {fileID: 21300000, guid: 610bf7c12049c7744981044b4fc5359e, type: 3}
+  - {fileID: 21300000, guid: d7909c1851340984e9e20fcbc0cba72a, type: 3}
+  - {fileID: 21300000, guid: 31b61c1bd71a99c45b48c82294f1c13c, type: 3}
+  - {fileID: 21300000, guid: 1d13b111d1d9f404ca611c5b1e2a66e3, type: 3}
+  - {fileID: 21300000, guid: 9fa2b00e4699b30428240e549aad9719, type: 3}
+  - {fileID: 21300000, guid: a726cebcfd0b10a42a15f3e4388eca0e, type: 3}
+  - {fileID: 21300000, guid: 28afb5d5e9d728a4bb5e8c9256532112, type: 3}
+  - {fileID: 21300000, guid: 5de979245904a4142bb42f2fd158180c, type: 3}
+  - {fileID: 21300000, guid: 69187410584586947a1ab4a743192dd2, type: 3}
 --- !u!212 &21248746
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -64,8 +116,67 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 7da916a787b44f342884b7fbeb98857e,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[3]
+      value: 
+      objectReference: {fileID: 21300000, guid: d7909c1851340984e9e20fcbc0cba72a,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: 610bf7c12049c7744981044b4fc5359e,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[5]
+      value: 
+      objectReference: {fileID: 21300000, guid: 1d13b111d1d9f404ca611c5b1e2a66e3,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[4]
+      value: 
+      objectReference: {fileID: 21300000, guid: 31b61c1bd71a99c45b48c82294f1c13c,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[6]
+      value: 
+      objectReference: {fileID: 21300000, guid: 9fa2b00e4699b30428240e549aad9719,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[7]
+      value: 
+      objectReference: {fileID: 21300000, guid: a726cebcfd0b10a42a15f3e4388eca0e,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[8]
+      value: 
+      objectReference: {fileID: 21300000, guid: 28afb5d5e9d728a4bb5e8c9256532112,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[9]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5de979245904a4142bb42f2fd158180c,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[10]
+      value: 
+      objectReference: {fileID: 21300000, guid: 69187410584586947a1ab4a743192dd2,
+        type: 3}
+    - target: {fileID: 0}
+      propertyPath: sprites.Array.data[11]
+      value: 
+      objectReference: {fileID: 21300000, guid: 69187410584586947a1ab4a743192dd2,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 180142}
+  m_RootGameObject: {fileID: 192516}
   m_IsPrefabParent: 1

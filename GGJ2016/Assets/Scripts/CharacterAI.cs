@@ -450,7 +450,7 @@ public class CharacterAI {
 
     private float WeightGetKeysAndWallet()
     {
-        if (IsHolding(PickUpType.Keys)) return -100f;
+        if (IsHolding(PickUpType.KeysWallet)) return -100f;
 
         float value = 0.7f;
         if (gameVars.hasDrankCoffee) value += 0.3f;
@@ -458,7 +458,7 @@ public class CharacterAI {
         if (gameVars.isLate) value -= 0.1f;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
 
-        if (!HasBeliefInLocation(PickUpType.Keys)) value -= 0.2f;
+        if (!HasBeliefInLocation(PickUpType.KeysWallet)) value -= 0.2f;
         return value;
     }
 
@@ -467,7 +467,7 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Briefcase)) return -100f;
 
         float value = 0.9f;
-        if (!IsHolding(PickUpType.Keys)) value -= 0.3f;
+        if (!IsHolding(PickUpType.KeysWallet)) value -= 0.3f;
         if (gameVars.hasDrankCoffee) value += 0.3f;
         if (gameVars.hasReadNewsPapers) value += 0.3f;
         if (gameVars.isLate) value -= 0.1f;
@@ -482,7 +482,7 @@ public class CharacterAI {
         if (IsHolding(PickUpType.Shoes)) return -100f;
 
         float value = 0.8f;
-        if (!IsHolding(PickUpType.Keys)) value -= 0.2f;
+        if (!IsHolding(PickUpType.KeysWallet)) value -= 0.2f;
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
         if (gameVars.isLate) value -= 0;
         if (gameVars.isLateAndAwareOfIt) value -= 0.1f;
@@ -496,11 +496,11 @@ public class CharacterAI {
     {
         float value = 0.2f;
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
-        if (!IsHolding(PickUpType.Keys)) value -= 0.1f;
+        if (!IsHolding(PickUpType.KeysWallet)) value -= 0.1f;
         if (!IsHolding(PickUpType.Shoes)) value -= 0.2f;
         if (!gameVars.changedClothes) value -= 0.2f;
         if (!IsHolding(PickUpType.Briefcase)) value -= 0.2f;
-        if (!IsHolding(PickUpType.Keys)) value -= 0.2f;
+        if (!IsHolding(PickUpType.KeysWallet)) value -= 0.2f;
         if (gameVars.isLate) value += 0.5f;
         if (gameVars.isLateAndAwareOfIt) value += 0.3f;
         return value;
@@ -751,7 +751,7 @@ public class CharacterAI {
 
     private void UpdateGetKeysAndWallet()
     {
-        var pickup = gameManager.pickups[PickUpType.Keys];
+        var pickup = gameManager.pickups[PickUpType.KeysWallet];
         GrabItemUpdateFunction(pickup.believedX, pickup.believedY, OnReachGetKeysAndWallet);
     }
 
@@ -890,8 +890,8 @@ public class CharacterAI {
 
     private void OnReachGetKeysAndWallet(int cx, int cy)
     {
-        bool result = TryTakeItem(PickUpType.Keys);
-        if (!result) LoseBeliefInLocation(PickUpType.Keys);
+        bool result = TryTakeItem(PickUpType.KeysWallet);
+        if (!result) LoseBeliefInLocation(PickUpType.KeysWallet);
     }
 
     private void OnReachGetBriefcase(int cx, int cy)
