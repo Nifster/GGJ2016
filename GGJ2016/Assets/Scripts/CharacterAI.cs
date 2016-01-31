@@ -572,6 +572,7 @@ public class CharacterAI {
         if (!gameVars.ateCereal) value -= 0.1f;
         if (gameVars.isLate) value += 0.5f;
         if (gameVars.isLateAndAwareOfIt) value += 0.3f;
+        if (gameVars.minutesPassed > 60) value = 100f;
         return value;
     }
 
