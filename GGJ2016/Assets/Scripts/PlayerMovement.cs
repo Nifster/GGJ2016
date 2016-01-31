@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private float moveStartTime;
     private float moveEndTime;
-    private float moveCooldown = 0.2f;
+    private float moveCooldown = 0.17f;
 
 	Animator playerAnim;
 

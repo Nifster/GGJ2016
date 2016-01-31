@@ -806,7 +806,7 @@ public class CharacterAI {
 
     private void OnReachGoToilet(int cx, int cy)
     {
-        charState.StartJob(JobType.GO_TOILET, 3f);
+        charState.StartJob(JobType.GO_TOILET, 1.8f);
     }
 
     private void OnReachFindToothbrush(int cx, int cy)
@@ -822,7 +822,7 @@ public class CharacterAI {
 
     private void OnReachBrushTeeth(int cx, int cy)
     {
-        charState.StartJob(JobType.BRUSH_TEETH, 4f);
+        charState.StartJob(JobType.BRUSH_TEETH, 2.4f);
     }
 
     private void OnReachGetMilk(int cx, int cy)
@@ -862,7 +862,7 @@ public class CharacterAI {
 
     private void OnReachChangeClothes(int cx, int cy)
     {
-        charState.StartJob(JobType.CHANGE_CLOTHES, 5f);
+        charState.StartJob(JobType.CHANGE_CLOTHES, 3f);
     }
 
     private void OnReachGetCoffee(int cx, int cy)
@@ -880,12 +880,12 @@ public class CharacterAI {
 
     private void OnReachStartMakingCoffee(int cx, int cy)
     {
-        charState.StartJob(JobType.START_MAKING_COFFEE, 1.5f);
+        charState.StartJob(JobType.START_MAKING_COFFEE, 1.2f);
     }
 
     private void OnReachSitOnCouch(int cx, int cy)
     {
-        charState.StartJob(JobType.SIT_ON_COUCH, 8f);
+        charState.StartJob(JobType.SIT_ON_COUCH, 5f);
     }
 
     private void OnReachGetKeysAndWallet(int cx, int cy)
@@ -908,12 +908,12 @@ public class CharacterAI {
 
     private void OnReachMakeBed(int cx, int cy)
     {
-        charState.StartJob(JobType.MAKE_BED, 5f);
+        charState.StartJob(JobType.MAKE_BED, 3f);
     }
 
     private void OnReachLeaveHouse(int cx, int cy)
     {
-        charState.StartJob(JobType.LEAVE_HOUSE, 1f);
+        charState.StartJob(JobType.LEAVE_HOUSE, 0.5f);
     }
 
 

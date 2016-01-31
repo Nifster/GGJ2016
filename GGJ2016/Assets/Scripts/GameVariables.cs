@@ -3,6 +3,17 @@ using System;
 
 public class GameVariables
 {
+    public float startTime;
+
+    public float minutesPassed
+    {
+        get
+        {
+            float t = Time.time - startTime;
+            return t/8;
+        }
+    }
+
     public float suspicionLevel = 0; // between 0 and 1.
 
     public bool findingToothbrushSearchedRoom = false;
@@ -79,5 +90,12 @@ public class GameVariables
     {
         suspicionLevel += val;
         suspicionLevel = Mathf.Clamp(suspicionLevel, 0, 1);
+    }
+
+
+
+    public GameVariables()
+    {
+        startTime = Time.time;
     }
 }

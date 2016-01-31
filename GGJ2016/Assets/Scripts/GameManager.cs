@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,10 @@ public class GameManager : MonoBehaviour
     private TextObject objectiveText;
 
     [SerializeField] private GameObject scene_unbed;
+
+    [SerializeField]
+    private GameObject timeTextObject;
+    private TextObject timeText;
 
 
 
@@ -107,6 +112,7 @@ public class GameManager : MonoBehaviour
         player = playerObject.GetComponent<PlayerMovement>();
         splashScreen = this.GetComponent<BlackFilter>();
         objectiveText = objectiveTextObject.GetComponent<TextObject>();
+        timeText = timeTextObject.GetComponent<TextObject>();
 
         meterBack = new Texture2D(1, 1);
         meterBack.SetPixel(0, 0, Color.gray);
@@ -301,6 +307,8 @@ public class GameManager : MonoBehaviour
 	            splashScreen.FadeOut(false);
 	        }
 	    }
+
+	    UpdateClock();
 	}
 
     private void InitialiseObjective()
@@ -318,6 +326,20 @@ public class GameManager : MonoBehaviour
     {
         scene_unbed.GetComponent<SpriteRenderer>().enabled = false;
     }
+
+    private void UpdateClock()
+    {
+        int m = (int)gameVars.minutesPassed;
+        int hrs = m/60;
+        int mins = m%60;
+
+        string hrString = (hrs + 7) + "";
+        string minString = mins + "";
+        if (minString.Length < 2) minString = "0" + minString;
+
+        timeText.UpdateString(hrString + ":" + minString);
+    }
+
 
     #region Interact Actions
 
