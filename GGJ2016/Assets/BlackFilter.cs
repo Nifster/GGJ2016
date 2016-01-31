@@ -114,9 +114,9 @@ public class BlackFilter : MonoBehaviour
         } else if (t < 2f)
         {
             textObject.Hide();
-        } else if (t < 5f)
+        } else if (t < 4f)
         {
-            float f = (t - 2f)/3f;
+            float f = (t - 2f)/2f;
             alpha = 1 - f;
             UpdateAlpha();
         }
@@ -132,22 +132,22 @@ public class BlackFilter : MonoBehaviour
 
     private void UpdateFadeOut(float t)
     {
-        if (t < 3f)
+        if (t < 2f)
         {
-            float f = t / 3f;
+            float f = t / 2f;
             alpha = f;
             UpdateAlpha();
         }
-        else if (t < 3.5f)
+        else if (t < 2.5f)
         {
             alpha = 1f;
             UpdateAlpha();
         }
-        else if (t < 4.5f)
+        else if (t < 3.5f)
         {
             textObject.Show();
         }
-        else if (t < 5f)
+        else if (t < 4f)
         {
             textObject.Hide();
         }
